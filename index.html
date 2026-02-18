@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kahuto Pacific — Project Scope Confirmation, AOI Verification & Mobilisation Authorisation</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230e4a3a'/><text x='50%25' y='55%25' font-size='18' text-anchor='middle' dominant-baseline='middle' fill='%23d4a853' font-weight='bold'>K</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --g:#0e4a3a;--gl:#1a6b54;--gxl:#e8f0ed;
+      --gold:#d4a853;--gold-l:#faf3e0;
+      --bg:#f4f5f4;--white:#fff;
+      --tx:#1a1f1e;--tx-s:#4a5654;--tx-xs:#8a9593;
+      --bd:#dfe4e2;--bd-l:#eef1ef;
+      --r:10px;--rl:14px;
+      --sh:0 1px 3px rgba(14,74,58,.06);--shm:0 4px 16px rgba(14,74,58,.08);
+    }
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;line-height:1.5}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c5cac8;border-radius:3px}
+    button,input,select,textarea{font-family:inherit}
+    button{cursor:pointer;border:none;-webkit-tap-highlight-color:transparent}
+
+    .hdr{background:linear-gradient(145deg,#082e24,var(--g) 40%,var(--gl));position:relative;overflow:hidden}
+    .hdr::before{content:'';position:absolute;top:-40%;right:-15%;width:400px;height:400px;background:radial-gradient(circle,rgba(212,168,83,.1),transparent 70%);pointer-events:none}
+    .hdr-in{max-width:820px;margin:0 auto;padding:28px 24px 20px;position:relative;z-index:1}
+    .brand{font-size:10px;letter-spacing:4px;color:var(--gold);font-weight:700;text-transform:uppercase}
+    .hdr h1{font-family:'Fraunces',serif;font-weight:800;font-size:22px;color:#fff;margin:6px 0 0;letter-spacing:-.5px;line-height:1.3}
+    .hdr-sub{font-size:13px;color:rgba(255,255,255,.5);margin-top:4px}
+    .gold-rule{height:2px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:16px;border-radius:1px}
+
+    .tabs{background:var(--white);border-bottom:1px solid var(--bd);padding:0 24px;overflow-x:auto}
+    .tabs-in{max-width:820px;margin:0 auto;display:flex}
+    .tab{padding:13px 14px;background:none;color:var(--tx-xs);font-weight:500;font-size:11px;white-space:nowrap;border-bottom:2.5px solid transparent;transition:.2s}
+    .tab:hover{color:var(--tx-s)}.tab.on{color:var(--g);font-weight:700;border-bottom-color:var(--g)}
+    .tab .n{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px;border-radius:50%;font-size:10px;font-weight:700;margin-right:5px;background:var(--bd-l);color:var(--tx-xs);transition:.2s}
+    .tab.on .n{background:var(--g);color:#fff}
+
+    .wrap{max-width:820px;margin:0 auto;padding:20px 24px 120px}
+
+    .card{background:var(--white);border:1px solid var(--bd);border-radius:var(--rl);padding:22px 26px;margin-bottom:16px;box-shadow:var(--sh)}
+    .ct{font-size:15px;font-weight:700;color:var(--g);display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:11px;border-bottom:1px solid var(--bd-l)}
+    .ct .ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--gxl)}
+    .ct .sn{font-family:'Fraunces',serif;font-weight:800;font-size:13px;color:var(--g);width:28px;height:28px;border-radius:50%;border:2px solid var(--g);display:flex;align-items:center;justify-content:center}
+
+    .fr{display:flex;flex-wrap:wrap;gap:14px}
+    .fd{flex:1 1 100%;min-width:0}.fd.h{flex:1 1 calc(50% - 7px);min-width:220px}.fd.t{flex:1 1 calc(33.33% - 10px);min-width:180px}
+    .fl{display:block;font-size:11px;font-weight:600;color:var(--tx-s);margin-bottom:4px;text-transform:uppercase;letter-spacing:.6px}
+    .fl .rq{color:#c53030;margin-left:2px}
+    .fd input,.fd select,.fd textarea{width:100%;padding:10px 14px;border:1.5px solid var(--bd);border-radius:var(--r);font-size:14px;background:#fafbfb;color:var(--tx);outline:0;transition:.15s}
+    .fd input:focus,.fd select:focus,.fd textarea:focus{border-color:var(--g);background:#fff;box-shadow:0 0 0 3px rgba(14,74,58,.08)}
+    .fd textarea{resize:vertical;min-height:56px}.fd input::placeholder,.fd textarea::placeholder{color:#b5bfbc}
+
+    .cg{display:flex;flex-wrap:wrap;gap:7px}
+    .ch{padding:7px 15px;border-radius:8px;font-size:13px;font-weight:500;border:1.5px solid var(--bd);background:var(--white);color:var(--tx-s);transition:.15s;user-select:none}
+    .ch:hover{border-color:#b8cdc5;background:#f8fbfa}
+    .ch.on{border-color:var(--g);background:var(--gxl);color:var(--g);font-weight:600}
+    .ch.on::before{content:'✓ ';font-weight:700}
+
+    .pr{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--bd-l);gap:12px;flex-wrap:wrap}
+    .pr:last-of-type{border-bottom:none}
+    .pr-l{font-size:13px;color:var(--tx);flex:1 1 200px}
+    .pr-bs{display:flex;gap:5px}
+    .pb{padding:5px 12px;border-radius:6px;font-size:11px;font-weight:600;border:1.5px solid var(--bd);background:var(--white);color:var(--tx-xs);transition:.15s}
+    .pb.yes{border:none;background:var(--g);color:#fff}
+    .pb.na{border:none;background:#6b7c78;color:#fff}
+    .pb.out{border:none;background:#b7791f;color:#fff}
+
+    .sl{font-size:11px;font-weight:700;color:var(--tx-xs);text-transform:uppercase;letter-spacing:.7px;margin:0 0 8px}
+    .hint{font-size:13px;color:var(--tx-s);margin-bottom:14px;line-height:1.6}
+    .hint b{color:var(--tx)}
+
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:var(--r);font-size:14px;font-weight:600;transition:.15s}
+    .btn-p{background:var(--g);color:#fff}.btn-p:hover{background:#0b3d30;box-shadow:var(--shm)}
+    .btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#c09930}
+    .btn-o{background:var(--white);color:var(--g);border:1.5px solid var(--g)}.btn-o:hover{background:var(--gxl)}
+    .btn-gh{background:transparent;color:var(--tx-s);border:1.5px solid var(--bd)}.btn-gh:hover{background:#f0f2f1}
+    .btn:disabled{opacity:.4;cursor:not-allowed}
+    .btn-lg{padding:14px 28px;font-size:15px;font-weight:700;border-radius:12px}
+
+    .fnav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--bd);padding:12px 24px;z-index:50;box-shadow:0 -2px 10px rgba(0,0,0,.04)}
+    .fnav-in{max-width:820px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+
+    .ib{padding:14px 18px;border-radius:var(--r);font-size:13px;line-height:1.6}
+    .ib.gr{background:#edf5f1;border:1px solid #c8ddd3;color:var(--g)}
+    .ib.warn{background:#fefbeb;border:1px solid #e8d9a0;color:#92710c}
+
+    .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:10px;font-size:13px;font-weight:600;z-index:100;box-shadow:0 8px 32px rgba(14,74,58,.15);animation:fu .3s}
+    .toast.ok{background:var(--g);color:#fff}.toast.err{background:#c53030;color:#fff}
+    @keyframes fu{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+    /* Scope item rows */
+    .scope-row{display:flex;gap:8px;align-items:start;margin-bottom:8px}
+    .scope-row .fd{flex:1}
+    .scope-del{padding:8px 10px;border-radius:var(--r);background:none;border:1.5px solid var(--bd);color:var(--tx-xs);font-size:14px;margin-top:22px;transition:.15s}
+    .scope-del:hover{border-color:#c53030;color:#c53030;background:rgba(197,48,48,.04)}
+
+    /* Schedule table */
+    .sched-table{width:100%;border-collapse:collapse;font-size:13px}
+    .sched-table th{text-align:left;padding:8px 10px;background:var(--gxl);color:var(--g);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--g)}
+    .sched-table td{padding:4px 4px;border-bottom:1px solid var(--bd-l)}
+    .sched-table td input{padding:7px 10px;font-size:12px}
+    .sched-table .item-no{font-family:monospace;font-weight:700;color:var(--g);font-size:13px;width:36px;text-align:center}
+
+    /* Map */
+    .map-wrap{position:relative;height:420px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--bd);margin:12px 0}
+    .map-wrap .leaflet-container{height:100%;width:100%;z-index:1}
+    .map-stats{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+    .map-stat{padding:8px 16px;background:var(--gxl);border-radius:8px;font-size:12px;color:var(--g);font-weight:600}
+    .map-stat b{font-family:monospace;font-size:15px;margin-right:4px}
+    .leaflet-draw-toolbar a,.leaflet-bar a{background-color:#fff !important;border-color:var(--bd) !important;color:var(--g) !important}
+    .leaflet-draw-toolbar a:hover,.leaflet-bar a:hover{background-color:var(--gxl) !important}
+
+    /* Sig block */
+    .sig-block{flex:1;min-width:280px;padding:20px;background:#fafbfb;border:1.5px solid var(--bd);border-radius:var(--rl)}
+    .sig-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx-xs);margin-bottom:14px}
+    .sig-blank{text-align:center;padding:30px 16px;color:var(--tx-xs);border:2px dashed var(--bd);border-radius:var(--r)}
+
+    @media(max-width:640px){
+      .hdr-in{padding:22px 18px 16px}.hdr h1{font-size:18px}
+      .wrap{padding:16px 16px 120px}.card{padding:18px 18px}
+      .fd.h,.fd.t{flex:1 1 100%;min-width:0}.tab{padding:12px 6px;font-size:10px}
+      .tab .n{width:17px;height:17px;font-size:9px;margin-right:3px}
+      .map-wrap{height:300px}
+      .sig-block{min-width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+  <script type="text/babel">
+    const{useState,useEffect,useRef,useCallback}=React;
+
+    // ═══════════════════════════════════════
+    //  FORM OPTIONS — matching document exactly
+    // ═══════════════════════════════════════
+    const STEPS=["Project Info","Scope of Services","AOI Verification","Pre-Mobilisation","Schedule","Variations","Acknowledgement","Authorisation & Export"];
+
+    const SURVEY_TYPES=["Topographic Survey","Subsurface Utility Detection (GPR / EMI)","Terrestrial Laser Scanning","UAV LiDAR","Photogrammetry","Control Survey","Asset Mapping"];
+
+    const DELIVERABLES=["CAD (DWG)","GIS Package","PDF Plans","Digital Terrain Model (DTM)","Digital Surface Model (DSM)","TIN Model","Classified Point Cloud","Utility Attribute Table","QA/QC Report","Survey Report"];
+
+    const PRE_MOB=["Latest asset plans","Utility authority drawings","As-built drawings","Previous survey data","Control point data","Design drawings","Traffic Management requirements","Access approvals / landowner consent","Site induction documentation","Safety requirements specific to site"];
+
+    const VARIATIONS=["Expansion of AOI boundary","Additional site days","Additional processing","Potholing / intrusive verification","Re-mobilisation","Additional deliverables","Re-processing due to design change","Delay exceeding agreed mobilisation window","Authority-imposed additional requirements"];
+
+    const ACK_ITEMS=["The confirmed scope is limited to items listed in this document.","Works outside the confirmed scope will be treated as Variations.","Utility detection is subject to limitations where asset plans are incomplete.","Weather and site conditions may impact field operations.","This document forms the agreed operational scope of works."];
+
+    const SCHED_ROWS=[
+      {item:"0",task:"Contract Activation",desc:"Scope confirmation & approval",dur:"0 Days"},
+      {item:"1",task:"Pre-Site Administration",desc:"Permits, authority notifications, TMP",dur:""},
+      {item:"2",task:"Field Works",desc:"Site survey / detection / scanning",dur:""},
+      {item:"3",task:"Data Processing & QA/QC",desc:"Processing and internal review",dur:""},
+      {item:"4",task:"Delivery",desc:"Submission of deliverables",dur:"0 Days"},
+    ];
+
+    const PRESET_LOCS=[
+      {n:'Suva',la:-18.1416,ln:178.4419,z:13},{n:'Nadi',la:-17.7765,ln:177.95,z:13},
+      {n:'Nausori',la:-18.0194,ln:178.525,z:14},{n:'Lautoka',la:-17.6161,ln:177.4509,z:14},
+      {n:'Labasa',la:-16.4267,ln:179.364,z:14},{n:'Honiara',la:-9.4295,ln:159.9729,z:13},
+    ];
+
+    // ═══════════════════════════════════════
+    //  GEO HELPERS
+    // ═══════════════════════════════════════
+    function calcPolyArea(coords){if(coords.length<3)return 0;const R=6371000,r=Math.PI/180;let a=0;for(let i=0;i<coords.length;i++){const j=(i+1)%coords.length;a+=coords[i][1]*r*R*Math.cos(coords[i][0]*r)*(coords[j][0]*r*R)-(coords[j][1]*r*R*Math.cos(coords[j][0]*r))*(coords[i][0]*r*R);}return Math.abs(a)/2;}
+    function fmtArea(m2){const ha=m2/10000;return ha<0.01?m2.toFixed(0)+' m²':ha.toFixed(2)+' ha';}
+    function calcLen(coords){let d=0;for(let i=1;i<coords.length;i++){const R=6371000,r=Math.PI/180,dLat=(coords[i][0]-coords[i-1][0])*r,dLng=(coords[i][1]-coords[i-1][1])*r,a=Math.sin(dLat/2)**2+Math.cos(coords[i-1][0]*r)*Math.cos(coords[i][0]*r)*Math.sin(dLng/2)**2;d+=R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));}return d;}
+    function fmtLen(m){return m<1000?m.toFixed(0)+' m':(m/1000).toFixed(2)+' km';}
+
+    // ═══════════════════════════════════════
+    //  KML PARSE / EXPORT
+    // ═══════════════════════════════════════
+    function parseKML(text){
+      const doc=new DOMParser().parseFromString(text,'text/xml');
+      if(doc.querySelector('parsererror'))return null;
+      const shapes=[];
+      doc.querySelectorAll('Placemark').forEach(pm=>{
+        const nameEl=pm.querySelector('name');const name=nameEl?nameEl.textContent:'';
+        const pg=pm.querySelector('Polygon outerBoundaryIs LinearRing coordinates');
+        if(pg){const coords=pg.textContent.trim().split(/\s+/).map(c=>{const p=c.split(',');return p.length>=2?[+p[1],+p[0]]:null}).filter(Boolean);if(coords.length>=3){if(coords[0][0]===coords[coords.length-1][0]&&coords[0][1]===coords[coords.length-1][1])coords.pop();shapes.push({type:'polygon',name,coords});}}
+        const ln=pm.querySelector('LineString coordinates');
+        if(ln){const coords=ln.textContent.trim().split(/\s+/).map(c=>{const p=c.split(',');return p.length>=2?[+p[1],+p[0]]:null}).filter(Boolean);if(coords.length>=2)shapes.push({type:'polyline',name,coords});}
+        const pt=pm.querySelector('Point coordinates');
+        if(pt){const p=pt.textContent.trim().split(',');if(p.length>=2)shapes.push({type:'marker',name,coords:[[+p[1],+p[0]]]});}
+      });
+      const docName=doc.querySelector('Document > name');
+      return{name:docName?docName.textContent:'',shapes};
+    }
+
+    function exportKML(shapes,projectName){
+      const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const N=String.fromCharCode(60)+'name'+String.fromCharCode(62);
+      const NC=String.fromCharCode(60)+'/name'+String.fromCharCode(62);
+      const pms=shapes.map((s,i)=>{
+        let geo='';const nm=s.name||(s.type==='polygon'?'Area ':'Line ')+(i+1);
+        if(s.type==='polygon'){const cs=s.coords.map(c=>c[1].toFixed(8)+','+c[0].toFixed(8)+',0').join(' ')+' '+s.coords[0][1].toFixed(8)+','+s.coords[0][0].toFixed(8)+',0';geo='<Polygon><outerBoundaryIs><LinearRing><coordinates>'+cs+'</coordinates></LinearRing></outerBoundaryIs></Polygon>';}
+        else if(s.type==='polyline'){const cs=s.coords.map(c=>c[1].toFixed(8)+','+c[0].toFixed(8)+',0').join(' ');geo='<LineString><coordinates>'+cs+'</coordinates></LineString>';}
+        else if(s.type==='marker'){geo='<Point><coordinates>'+s.coords[0][1]+','+s.coords[0][0]+',0</coordinates></Point>';}
+        return'  <Placemark>\n    '+N+esc(nm)+NC+'\n    '+geo+'\n  </Placemark>';
+      }).join('\n');
+      return'<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2">\n<Document>\n  '+N+esc(projectName||'Survey Area')+NC+'\n'+pms+'\n</Document>\n</kml>';
+    }
+
+    // ═══════════════════════════════════════
+    //  PDF GENERATION — Two-stage: Kahuto signed, Client blank
+    // ═══════════════════════════════════════
+    function generatePDF(d){
+      const today=new Date().toLocaleDateString('en-FJ',{year:'numeric',month:'long',day:'numeric'});
+      const esc=s=>(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const sec=(n,t)=>'<div style="font-size:13px;font-weight:800;color:#0e4a3a;border-bottom:2.5px solid #0e4a3a;padding-bottom:4px;margin:22px 0 10px;font-family:Fraunces,serif;">'+n+'. '+t+'</div>';
+      const sub=t=>'<div style="font-size:11px;font-weight:700;color:#1a6b54;margin:12px 0 5px;">'+t+'</div>';
+      const chk=a=>(a||[]).map(i=>'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>'+i+'</div>').join('');
+      const unchk=a=>(a||[]).map(i=>'<div style="padding:2px 0;font-size:10.5px;color:#8a9593;"><span style="margin-right:6px;">☐</span>'+i+'</div>').join('');
+      const row=(l,v)=>v?'<tr><td style="padding:6px 12px;font-weight:600;color:#4a5654;font-size:10.5px;width:180px;border-bottom:1px solid #eef1ef;vertical-align:top;">'+l+'</td><td style="padding:6px 12px;font-size:10.5px;border-bottom:1px solid #eef1ef;color:#1a1f1e;">'+v+'</td></tr>':'';
+      const chip=items=>(items||[]).map(s=>'<span style="display:inline-block;padding:3px 10px;border-radius:5px;background:#e8f0ed;color:#0e4a3a;font-size:9.5px;font-weight:600;border:1px solid #c8ddd3;margin:2px 3px 2px 0;">'+s+'</span>').join('');
+      const note=v=>v?'<div style="background:#f4f5f4;border:1px solid #dfe4e2;border-radius:6px;padding:7px 12px;font-size:10px;color:#4a5654;margin-top:6px;">'+esc(v)+'</div>':'';
+      const bullet=items=>(items||[]).map(i=>'<div style="padding:1px 0;font-size:10.5px;color:#4a5654;">• '+i+'</div>').join('');
+
+      // AOI stats
+      let totalArea=0,totalLen=0;
+      (d.shapes||[]).forEach(s=>{if(s.type==='polygon')totalArea+=calcPolyArea(s.coords);if(s.type==='polyline')totalLen+=calcLen(s.coords);});
+
+      // Pre-mob status
+      const preMobChecked=(d.preMobStatuses||{});
+      const preMobProvided=PRE_MOB.filter(p=>preMobChecked[p]==='Provided');
+      const preMobNA=PRE_MOB.filter(p=>preMobChecked[p]==='N/A');
+      const preMobOutstanding=PRE_MOB.filter(p=>preMobChecked[p]==='Outstanding');
+
+      // Schedule rows
+      const schedHtml=(d.schedule||SCHED_ROWS).map(r=>'<tr><td style="padding:5px 10px;font-family:monospace;font-weight:700;color:#0e4a3a;text-align:center;border-bottom:1px solid #eef1ef;width:40px;">'+esc(r.item)+'</td><td style="padding:5px 10px;font-weight:600;border-bottom:1px solid #eef1ef;">'+esc(r.task)+'</td><td style="padding:5px 10px;font-size:10px;color:#4a5654;border-bottom:1px solid #eef1ef;">'+esc(r.desc)+'</td><td style="padding:5px 10px;font-size:10px;text-align:center;border-bottom:1px solid #eef1ef;">'+esc(r.dur)+'</td><td style="padding:5px 10px;font-size:10px;text-align:center;border-bottom:1px solid #eef1ef;">'+esc(r.start||'')+'</td><td style="padding:5px 10px;font-size:10px;text-align:center;border-bottom:1px solid #eef1ef;">'+esc(r.end||'')+'</td></tr>').join('');
+
+      const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>PSC - ${esc(d.projectName||'Form')}</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:wght@700;800&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'DM Sans',sans-serif;color:#1a1f1e;font-size:10.5px;line-height:1.55;background:#fff;}@page{size:A4;margin:14mm 18mm 16mm 18mm;}@media print{.no-print{display:none!important;}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}table{width:100%;border-collapse:collapse;}</style></head><body style="padding:14mm 18mm;">
+
+<!-- Header -->
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+<div>
+  <div style="font-size:9px;letter-spacing:4px;color:#d4a853;font-weight:700;text-transform:uppercase;">Kahuto Pacific Limited</div>
+  <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:800;color:#0e4a3a;line-height:1.25;margin-top:4px;">Project Scope Confirmation,<br/>AOI Verification &amp; Mobilisation Authorisation</div>
+</div>
+<div style="text-align:right;font-size:10px;color:#8a9593;line-height:1.7;">
+  ${d.projectCode?'<div style="font-size:14px;font-weight:700;color:#0e4a3a;font-family:monospace;">'+esc(d.projectCode)+'</div>':''}
+  <div>${today}</div>
+</div>
+</div>
+<div style="height:3px;background:linear-gradient(90deg,#d4a853 0%,#0e4a3a 40%,#0e4a3a 100%);border-radius:2px;margin:8px 0 4px;"></div>
+
+<!-- 1. Project Information -->
+${sec(1,'Project Information')}
+<table>${row('Project Name',d.projectName)}${row('Project Code',d.projectCode)}${row('Client Company',d.clientCompany)}${row('Client Representative',d.clientRep)}${row('Client Email',d.clientEmail)}${row('Site Location',d.siteLocation)}${row('Proposal Reference',d.proposalRef)}${row('Date Issued',d.dateIssued)}</table>
+
+<!-- 2. Purpose -->
+${sec(2,'Purpose of This Document')}
+<div style="font-size:10.5px;color:#4a5654;line-height:1.7;">
+<p>This document confirms the agreed Scope of Works, Area of Interest (AOI), Project Schedule, and Pre-Mobilisation Requirements.</p>
+<p style="margin-top:4px;">Upon signature, this document forms the operational agreement governing field mobilisation and delivery of services.</p>
+<p style="margin-top:4px;">Where a formal contract or signed proposal is not in place, this document shall serve as the confirmation of agreed scope.</p>
+</div>
+
+<!-- 3. Confirmed Scope of Services -->
+${sec(3,'Confirmed Scope of Services')}
+${sub('3.1 Survey Type')}
+<div style="margin:4px 0 10px;">${chip(d.surveyTypes)}${d.surveyOther?chip([d.surveyOther]):''}</div>
+
+${sub('3.2 Field Scope Summary')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:4px;">The Client authorises Kahuto Pacific to undertake the following works:</div>
+${(d.scopeItems||[]).filter(s=>s.trim()).map(s=>'<div style="padding:2px 0;font-size:10.5px;">• '+esc(s)+'</div>').join('')}
+
+${sub('3.3 Deliverables')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:4px;">Kahuto Pacific will provide:</div>
+${chk(d.deliverables)}
+${d.contourInterval?'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>Contours at <b>'+esc(d.contourInterval)+'</b> interval</div>':''}
+${d.deliverableOther?'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>'+esc(d.deliverableOther)+'</div>':''}
+<div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">Any deliverable not listed above is excluded from the agreed scope.</div>
+
+<!-- 4. AOI Confirmation -->
+${sec(4,'Area of Interest (AOI) Confirmation')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">The Client confirms that:</div>
+${chk(['A KML / SHP defining the Area of Interest (AOI) has been provided.','The AOI boundary is final and accurate.','No works are required outside the confirmed boundary.'])}
+<table style="margin-top:8px;">${row('AOI File Name',d.aoiFileName||'')}${row('Date Received',d.aoiDateReceived||'')}</table>
+${(d.shapes||[]).length?'<div style="margin-top:8px;padding:8px 12px;background:#e8f0ed;border-radius:6px;border:1px solid #c8ddd3;font-size:10.5px;color:#0e4a3a;"><b>'+d.shapes.length+' shape'+(d.shapes.length>1?'s':'')+' defined</b>'+(totalArea>0?' · '+fmtArea(totalArea)+' total area':'')+(totalLen>0?' · '+fmtLen(totalLen)+' total length':'')+'</div>':''}
+<div style="background:#fefbeb;border:1px solid #e8d9a0;border-radius:6px;padding:7px 12px;font-size:9.5px;color:#92710c;margin-top:8px;">
+<b>Important:</b><br/>• Any extension beyond the confirmed AOI will constitute a Variation.<br/>• Additional mobilisation or processing resulting from boundary change will be costed separately.
+</div>
+
+<!-- 5. Pre-Mobilisation Requirements -->
+${sec(5,'Client Pre-Mobilisation Requirements')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">Field works will not commence until the following are provided (where applicable):</div>
+${preMobProvided.length?'<div style="margin-bottom:6px;">'+chk(preMobProvided.map(p=>p+' — <span style="color:#0e4a3a;font-weight:600;">Provided</span>'))+'</div>':''}
+${preMobOutstanding.length?'<div style="margin-bottom:6px;">'+preMobOutstanding.map(p=>'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#b7791f;font-weight:700;margin-right:6px;">⚠</span>'+p+' — <span style="color:#b7791f;font-weight:600;">Outstanding</span></div>').join('')+'</div>':''}
+${preMobNA.length?'<div style="color:#8a9593;">'+unchk(preMobNA.map(p=>p+' — N/A'))+'</div>':''}
+${d.outstandingNotes?note('Outstanding Items: '+d.outstandingNotes):''}
+<div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">The Client acknowledges that missing documentation may: affect schedule, reduce utility detection confidence levels, result in additional variation costs.</div>
+
+<!-- 6. Project Schedule -->
+${sec(6,'Project Schedule (Agreed Program)')}
+<table style="border:1px solid #dfe4e2;border-radius:6px;overflow:hidden;">
+<tr style="background:#e8f0ed;"><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;width:40px;">Item</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:left;border-bottom:1.5px solid #0e4a3a;">Task</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:left;border-bottom:1.5px solid #0e4a3a;">Description</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;">Duration</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;">Start</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;">End</th></tr>
+${schedHtml}
+</table>
+<div style="font-size:9.5px;color:#8a9593;margin-top:8px;line-height:1.7;">
+<b>Schedule Conditions:</b> Subject to suitable weather · Dependent on timely provision of required documentation · Dependent on access availability · Authority approvals may impact start date.<br/>
+<b>Client-side delays</b> may result in: extension of time, re-mobilisation charges, variation costs.<br/>
+This schedule supersedes any previously issued indicative program unless otherwise agreed in writing.
+</div>
+
+<!-- 7. Variation & Scope Change Protocol -->
+${sec(7,'Variation & Scope Change Protocol')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">The following will constitute a Variation:</div>
+${chk(d.variations||[])}
+<div style="font-size:9.5px;color:#4a5654;margin-top:8px;line-height:1.7;">
+<b>All Variations:</b> Will be issued in writing · Will state cost and time impact · Must be approved prior to commencement.<br/>
+No additional works will be undertaken without written approval.
+</div>
+
+<!-- 8. Client Acknowledgement -->
+${sec(8,'Client Acknowledgement')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">The Client acknowledges that:</div>
+${ACK_ITEMS.map(a=>'<div style="padding:3px 0;font-size:10.5px;color:#1a1f1e;border-bottom:1px solid #eef1ef;padding-left:4px;">'+a+'</div>').join('')}
+
+<!-- 9. Authorisation to Proceed -->
+${sec(9,'Authorisation to Proceed')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:12px;">I confirm that:</div>
+${bullet(['The scope of works is accurate and agreed','The AOI boundary is confirmed','Required documentation has been provided or noted','The project schedule is accepted','Kahuto Pacific is authorised to proceed with mobilisation'])}
+
+<div style="display:flex;gap:40px;margin-top:20px;">
+  <div style="flex:1;">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#8a9593;margin-bottom:14px;">Client</div>
+    <table style="width:100%;">
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;width:80px;">Name:</td><td style="padding:4px 0;font-size:10.5px;border-bottom:1px solid #dfe4e2;min-height:20px;">&nbsp;</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Position:</td><td style="padding:4px 0;font-size:10.5px;border-bottom:1px solid #dfe4e2;">&nbsp;</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Company:</td><td style="padding:4px 0;font-size:10.5px;border-bottom:1px solid #dfe4e2;">&nbsp;</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Signature:</td><td style="padding:4px 0;border-bottom:1px solid #dfe4e2;height:36px;">&nbsp;</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Date:</td><td style="padding:4px 0;font-size:10.5px;border-bottom:1px solid #dfe4e2;">&nbsp;</td></tr>
+    </table>
+  </div>
+  <div style="flex:1;">
+    <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#8a9593;margin-bottom:14px;">Kahuto Pacific</div>
+    <table style="width:100%;">
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;width:80px;">Name:</td><td style="padding:4px 0;font-size:10.5px;font-weight:600;border-bottom:1px solid #dfe4e2;">${esc(d.kahutoName)}</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Position:</td><td style="padding:4px 0;font-size:10.5px;border-bottom:1px solid #dfe4e2;">${esc(d.kahutoPosition)}</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Signature:</td><td style="padding:4px 0;border-bottom:1px solid #dfe4e2;height:36px;">&nbsp;</td></tr>
+      <tr><td style="padding:4px 0;font-size:10px;color:#4a5654;">Date:</td><td style="padding:4px 0;font-size:10.5px;border-bottom:1px solid #dfe4e2;">${esc(d.kahutoDate)}</td></tr>
+    </table>
+  </div>
+</div>
+
+<div style="text-align:center;color:#b5bfbc;font-size:8.5px;margin-top:28px;padding-top:10px;border-top:1px solid #dfe4e2;">
+  Kahuto Pacific Limited &middot; Nadi, Fiji &middot; Project Scope Confirmation, AOI Verification &amp; Mobilisation Authorisation &middot; ${today}
+</div>
+
+<div class="no-print" style="text-align:center;margin:36px 0;padding:24px;background:#f4f5f4;border-radius:12px;">
+  <p style="font-size:15px;color:#1a1f1e;font-weight:700;margin-bottom:6px;">Save as PDF</p>
+  <p style="font-size:12px;color:#8a9593;margin-bottom:16px;">Press <b>Ctrl+P</b> (or Cmd+P on Mac) → <b>"Save as PDF"</b></p>
+  <button onclick="window.print()" style="padding:14px 36px;border-radius:10px;border:none;background:#0e4a3a;color:#fff;font-weight:700;font-size:15px;cursor:pointer;font-family:'DM Sans',sans-serif;">Save as PDF</button>
+</div>
+
+</body></html>`;
+      const w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}
+    }
+
+    // ═══════════════════════════════════════
+    //  UI COMPONENTS
+    // ═══════════════════════════════════════
+    function Card({title,icon,sn,children}){return <div className="card">{title&&<div className="ct">{sn?<div className="sn">{sn}</div>:<div className="ic">{icon}</div>}{title}</div>}{children}</div>}
+    function Fd({label,value,onChange,placeholder,type,half,third,required}){return <div className={"fd"+(half?" h":"")+(third?" t":"")}>
+      <label className="fl">{label}{required&&<span className="rq"> *</span>}</label>
+      <input type={type||"text"} value={value||""} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
+    </div>}
+    function Ta({label,value,onChange,placeholder,rows}){return <div className="fd"><label className="fl">{label}</label><textarea value={value||""} placeholder={placeholder} rows={rows||3} onChange={e=>onChange(e.target.value)}/></div>}
+    function CG({items,selected,toggle}){return <div className="cg">{items.map(i=><button key={i} type="button" className={"ch"+(selected.includes(i)?" on":"")} onClick={()=>toggle(i)}>{i}</button>)}</div>}
+    function PMRow({label,status,onChange}){return <div className="pr"><span className="pr-l">{label}</span><div className="pr-bs">{["Provided","Outstanding","N/A"].map(s=><button key={s} type="button" className={"pb"+(status===s?(s==="Provided"?" yes":s==="Outstanding"?" out":" na"):"")} onClick={()=>onChange(s)}>{s}</button>)}</div></div>}
+
+    // ═══════════════════════════════════════
+    //  MAP COMPONENT
+    // ═══════════════════════════════════════
+    function SurveyMap({shapes,onShapesChange}){
+      const mapRef=useRef(null);const mapInst=useRef(null);const fgRef=useRef(null);const fileRef=useRef(null);
+
+      useEffect(()=>{
+        if(mapInst.current)return;
+        const map=L.map(mapRef.current,{center:[-18.1416,178.4419],zoom:13,zoomControl:true});
+        const esriSat=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{attribution:'© Esri',maxZoom:19});
+        const esriLabels=L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,opacity:0.75});
+        const esriGroup=L.layerGroup([esriSat,esriLabels]);
+        const googleHybrid=L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{attribution:'© Google',maxZoom:21});
+        const osm=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19});
+        esriGroup.addTo(map);
+        L.control.layers({'Esri Satellite':esriGroup,'Google Hybrid':googleHybrid,'Street Map':osm},null,{position:'topright'}).addTo(map);
+
+        const fg=new L.FeatureGroup();map.addLayer(fg);fgRef.current=fg;
+        const dc=new L.Control.Draw({position:'topleft',draw:{polygon:{allowIntersection:false,shapeOptions:{color:'#0e4a3a',weight:2,fillColor:'#0e4a3a',fillOpacity:0.15}},polyline:{shapeOptions:{color:'#d4a853',weight:3}},rectangle:{shapeOptions:{color:'#1a6b54',weight:2,fillColor:'#1a6b54',fillOpacity:0.15}},circle:false,marker:true,circlemarker:false},edit:{featureGroup:fg,remove:true}});
+        map.addControl(dc);
+
+        const sync=()=>{const ns=[];fg.eachLayer(l=>{if(l instanceof L.Polygon){const lls=l.getLatLngs();const flat=Array.isArray(lls[0])?lls[0]:lls;ns.push({type:'polygon',name:'',coords:flat.map(c=>[c.lat,c.lng])});}else if(l instanceof L.Polyline){ns.push({type:'polyline',name:'',coords:l.getLatLngs().map(c=>[c.lat,c.lng])});}else if(l instanceof L.Marker){const ll=l.getLatLng();ns.push({type:'marker',name:'',coords:[[ll.lat,ll.lng]]});}});onShapesChange(ns);};
+
+        map.on(L.Draw.Event.CREATED,e=>{fg.addLayer(e.layer);sync();});
+        map.on(L.Draw.Event.DELETED,()=>sync());
+        map.on(L.Draw.Event.EDITED,()=>sync());
+
+        if(shapes&&shapes.length){shapes.forEach(s=>{if(s.type==='polygon')fg.addLayer(L.polygon(s.coords,{color:'#0e4a3a',weight:2,fillColor:'#0e4a3a',fillOpacity:0.15}));else if(s.type==='polyline')fg.addLayer(L.polyline(s.coords,{color:'#d4a853',weight:3}));else if(s.type==='marker')fg.addLayer(L.marker(s.coords[0]));});try{map.fitBounds(fg.getBounds().pad(0.2));}catch(e){}}
+        mapInst.current=map;
+      },[]);
+
+      const handleImport=useCallback(e=>{
+        const file=e.target.files[0];if(!file)return;
+        const reader=new FileReader();
+        reader.onload=ev=>{const res=parseKML(ev.target.result);if(!res||!res.shapes.length){alert('No valid shapes found in KML');return;}const fg=fgRef.current;const map=mapInst.current;fg.clearLayers();
+        res.shapes.forEach(s=>{if(s.type==='polygon')fg.addLayer(L.polygon(s.coords,{color:'#0e4a3a',weight:2,fillColor:'#0e4a3a',fillOpacity:0.15}));else if(s.type==='polyline')fg.addLayer(L.polyline(s.coords,{color:'#d4a853',weight:3}));else if(s.type==='marker')fg.addLayer(L.marker(s.coords[0]));});
+        try{map.fitBounds(fg.getBounds().pad(0.2));}catch(e){}onShapesChange(res.shapes);};
+        reader.readAsText(file);e.target.value='';
+      },[onShapesChange]);
+
+      const handleExport=useCallback(()=>{
+        if(!shapes||!shapes.length){alert('No shapes to export');return;}
+        const kml=exportKML(shapes,'Survey Area');
+        const blob=new Blob([kml],{type:'application/vnd.google-earth.kml+xml'});
+        const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='survey_area.kml';
+        document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+      },[shapes]);
+
+      const jumpTo=useCallback((lat,lng,z)=>{if(mapInst.current)mapInst.current.setView([lat,lng],z);},[]);
+
+      let totalArea=0,totalLen=0,ct=(shapes||[]).length;
+      (shapes||[]).forEach(s=>{if(s.type==='polygon')totalArea+=calcPolyArea(s.coords);if(s.type==='polyline')totalLen+=calcLen(s.coords);});
+
+      return <div>
+        <div style={{display:'flex',gap:8,marginBottom:10,flexWrap:'wrap',alignItems:'center'}}>
+          <button type="button" className="btn btn-o" style={{fontSize:12,padding:'8px 14px'}} onClick={()=>fileRef.current.click()}>📂 Import KML</button>
+          {ct>0&&<button type="button" className="btn btn-o" style={{fontSize:12,padding:'8px 14px'}} onClick={handleExport}>📥 Export KML</button>}
+          <div style={{marginLeft:'auto',display:'flex',gap:4,flexWrap:'wrap'}}>{PRESET_LOCS.map(p=><button key={p.n} type="button" className="btn btn-gh" style={{fontSize:10,padding:'5px 9px'}} onClick={()=>jumpTo(p.la,p.ln,p.z)}>{p.n}</button>)}</div>
+        </div>
+        <input type="file" ref={fileRef} accept=".kml" style={{display:'none'}} onChange={handleImport}/>
+        <div className="map-wrap"><div ref={mapRef} style={{height:'100%',width:'100%'}}/></div>
+        <div className="map-stats">
+          <div className="map-stat"><b>{ct}</b> shape{ct!==1?'s':''}</div>
+          {totalArea>0&&<div className="map-stat"><b>{fmtArea(totalArea)}</b> area</div>}
+          {totalLen>0&&<div className="map-stat"><b>{fmtLen(totalLen)}</b> length</div>}
+        </div>
+      </div>;
+    }
+
+    // ═══════════════════════════════════════
+    //  MAIN APP
+    // ═══════════════════════════════════════
+    function App(){
+      const[step,setStep]=useState(0);
+      const[toast,setToast]=useState(null);
+      const show=(m,t)=>{setToast({m,t});setTimeout(()=>setToast(null),3000)};
+
+      const[f,setF]=useState({
+        projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',
+        surveyTypes:[],surveyOther:'',
+        scopeItems:['','','',''],
+        deliverables:[],contourInterval:'',deliverableOther:'',
+        shapes:[],aoiFileName:'',aoiDateReceived:'',
+        preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',
+        schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),
+        variations:[...VARIATIONS],
+        kahutoName:'',kahutoPosition:'',kahutoDate:'',
+      });
+
+      const s=(k,v)=>setF(p=>({...p,[k]:v}));
+      const tog=k=>item=>setF(p=>{const a=p[k]||[];return{...p,[k]:a.includes(item)?a.filter(x=>x!==item):[...a,item]};});
+
+      const updateScopeItem=(idx,val)=>setF(p=>{const items=[...p.scopeItems];items[idx]=val;return{...p,scopeItems:items};});
+      const addScopeItem=()=>setF(p=>({...p,scopeItems:[...p.scopeItems,'']}));
+      const removeScopeItem=idx=>setF(p=>({...p,scopeItems:p.scopeItems.filter((_,i)=>i!==idx)}));
+
+      const updateSched=(idx,field,val)=>setF(p=>{const sched=[...p.schedule];sched[idx]={...sched[idx],[field]:val};return{...p,schedule:sched};});
+
+      const handleDownload=()=>{
+        if(!f.projectName){show('Please enter a Project Name in Step 1','err');return;}
+        if(!f.kahutoName){show('Please fill in Kahuto representative details in the Authorisation step','err');return;}
+        generatePDF(f);
+        show('PDF opened — Kahuto signed, client section left blank for signing','ok');
+      };
+
+      const handleExportKML=()=>{
+        if(!f.shapes||!f.shapes.length){show('No survey area shapes to export','err');return;}
+        const kml=exportKML(f.shapes,f.projectName||'Survey Area');
+        const blob=new Blob([kml],{type:'application/vnd.google-earth.kml+xml'});
+        const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+        a.download=(f.projectName||'survey').replace(/[^a-zA-Z0-9]/g,'_')+'_AOI.kml';
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);show('KML exported','ok');
+      };
+
+      const reset=()=>{setF({projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',surveyTypes:[],surveyOther:'',scopeItems:['','','',''],deliverables:[],contourInterval:'',deliverableOther:'',shapes:[],aoiFileName:'',aoiDateReceived:'',preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),variations:[...VARIATIONS],kahutoName:'',kahutoPosition:'',kahutoDate:''});setStep(0);show('Form reset','ok')};
+
+      const progress=((step+1)/STEPS.length)*100;
+
+      const sc=[
+        // 0: Project Info
+        ()=><>
+          <Card title="Project Information" sn="1">
+            <div className="fr">
+              <Fd label="Project Name" value={f.projectName} onChange={v=>s('projectName',v)} placeholder="e.g. Kings Road Corridor Survey" half required/>
+              <Fd label="Project Code" value={f.projectCode} onChange={v=>s('projectCode',v)} placeholder="e.g. KP-2026-031" half/>
+              <Fd label="Client Company" value={f.clientCompany} onChange={v=>s('clientCompany',v)} placeholder="e.g. Fiji Roads Authority" half/>
+              <Fd label="Client Representative" value={f.clientRep} onChange={v=>s('clientRep',v)} placeholder="Full name" half/>
+              <Fd label="Client Email" value={f.clientEmail} onChange={v=>s('clientEmail',v)} placeholder="email@example.com" half/>
+              <Fd label="Site Location" value={f.siteLocation} onChange={v=>s('siteLocation',v)} placeholder="e.g. Suva CBD, Viti Levu" half/>
+              <Fd label="Proposal Reference (if applicable)" value={f.proposalRef} onChange={v=>s('proposalRef',v)} placeholder="e.g. PROP-2026-015" half/>
+              <Fd label="Date Issued" value={f.dateIssued} onChange={v=>s('dateIssued',v)} type="date" half/>
+            </div>
+          </Card>
+          <Card title="Purpose of This Document" sn="2">
+            <div className="hint">
+              This document confirms the agreed <b>Scope of Works</b>, <b>Area of Interest (AOI)</b>, <b>Project Schedule</b>, and <b>Pre-Mobilisation Requirements</b>.
+            </div>
+            <div className="hint">Upon signature, this document forms the operational agreement governing field mobilisation and delivery of services.</div>
+            <div className="hint">Where a formal contract or signed proposal is not in place, this document shall serve as the confirmation of agreed scope.</div>
+          </Card>
+        </>,
+
+        // 1: Scope of Services
+        ()=><>
+          <Card title="3.1 — Survey Type" sn="3">
+            <p className="hint">Select all applicable survey types for this engagement.</p>
+            <CG items={SURVEY_TYPES} selected={f.surveyTypes} toggle={tog('surveyTypes')}/>
+            <div style={{marginTop:16}}><Fd label="Other (specify)" value={f.surveyOther} onChange={v=>s('surveyOther',v)}/></div>
+          </Card>
+          <Card title="3.2 — Field Scope Summary" icon="📝">
+            <p className="hint">The Client authorises Kahuto Pacific to undertake the following works:</p>
+            {f.scopeItems.map((item,i)=><div key={i} className="scope-row">
+              <Fd label={i===0?"Scope Item":"" } value={item} onChange={v=>updateScopeItem(i,v)} placeholder={"Describe scope item "+(i+1)+"..."}/>
+              {f.scopeItems.length>1&&<button type="button" className="scope-del" onClick={()=>removeScopeItem(i)} title="Remove">✕</button>}
+            </div>)}
+            <button type="button" className="btn btn-gh" style={{fontSize:12,padding:'8px 14px',marginTop:4}} onClick={addScopeItem}>+ Add Scope Item</button>
+          </Card>
+          <Card title="3.3 — Deliverables" icon="📦">
+            <p className="hint">Kahuto Pacific will provide:</p>
+            <CG items={DELIVERABLES} selected={f.deliverables} toggle={tog('deliverables')}/>
+            <div className="fr" style={{marginTop:16}}>
+              <Fd label="Contours at ___ interval" value={f.contourInterval} onChange={v=>s('contourInterval',v)} placeholder="e.g. 0.5m" half/>
+              <Fd label="Other deliverable" value={f.deliverableOther} onChange={v=>s('deliverableOther',v)} placeholder="Specify..." half/>
+            </div>
+            <div style={{marginTop:12,fontSize:12,color:'var(--tx-xs)',fontStyle:'italic'}}>Any deliverable not listed above is excluded from the agreed scope.</div>
+          </Card>
+        </>,
+
+        // 2: AOI Verification
+        ()=><Card title="Area of Interest (AOI) Confirmation" sn="4">
+          <p className="hint">The Client confirms that a KML/SHP defining the AOI has been provided, the boundary is final and accurate, and no works are required outside the confirmed boundary.</p>
+          <div className="fr" style={{marginBottom:16}}>
+            <Fd label="AOI File Name" value={f.aoiFileName} onChange={v=>s('aoiFileName',v)} placeholder="e.g. kings_road_survey_area.kml" half/>
+            <Fd label="Date Received" value={f.aoiDateReceived} onChange={v=>s('aoiDateReceived',v)} type="date" half/>
+          </div>
+          <div className="sl" style={{marginTop:8}}>Survey Area Definer</div>
+          <p className="hint">Import the agreed KML or draw the survey boundary directly. The area will be exported as a KML file and sent to client (Make sure to export it as a KML file at the end of this form).</p>
+          <SurveyMap shapes={f.shapes} onShapesChange={newShapes=>s('shapes',newShapes)}/>
+          <div className="ib warn" style={{marginTop:14}}>
+            <div style={{fontWeight:700,marginBottom:4}}>Important</div>
+            <div style={{fontSize:12.5}}>• Any extension beyond the confirmed AOI will constitute a Variation.<br/>• Additional mobilisation or processing resulting from boundary change will be costed separately.</div>
+          </div>
+        </Card>,
+
+        // 3: Pre-Mobilisation
+        ()=><Card title="Client Pre-Mobilisation Requirements" sn="5">
+          <p className="hint">Field works will not commence until the following are provided (where applicable). Set the status of each item.</p>
+          {PRE_MOB.map(p=><PMRow key={p} label={p} status={f.preMobStatuses[p]} onChange={v=>s('preMobStatuses',{...f.preMobStatuses,[p]:v})}/>)}
+          <div style={{marginTop:16}}>
+            <Ta label="Outstanding Items / Notes" value={f.outstandingNotes} onChange={v=>s('outstandingNotes',v)} placeholder="Note any outstanding items or required actions..."/>
+          </div>
+          <div style={{marginTop:12,fontSize:12,color:'var(--tx-xs)',fontStyle:'italic'}}>
+            The Client acknowledges that missing documentation may: affect schedule, reduce utility detection confidence levels, result in additional variation costs.
+          </div>
+        </Card>,
+
+        // 4: Schedule
+        ()=><Card title="Project Schedule (Agreed Program)" sn="6">
+          <p className="hint">The following schedule forms part of the confirmed scope.</p>
+          <table className="sched-table">
+            <thead><tr><th>Item</th><th>Task</th><th>Description</th><th>Duration</th><th>Start Date</th><th>End Date</th></tr></thead>
+            <tbody>
+              {f.schedule.map((r,i)=><tr key={i}>
+                <td className="item-no">{r.item}</td>
+                <td style={{fontWeight:600,fontSize:13,padding:'6px 8px'}}>{r.task}</td>
+                <td style={{fontSize:12,color:'var(--tx-s)',padding:'6px 8px'}}>{r.desc}</td>
+                <td><input value={r.dur} onChange={e=>updateSched(i,'dur',e.target.value)} placeholder="e.g. 5 Days"/></td>
+                <td><input type="date" value={r.start} onChange={e=>updateSched(i,'start',e.target.value)}/></td>
+                <td><input type="date" value={r.end} onChange={e=>updateSched(i,'end',e.target.value)}/></td>
+              </tr>)}
+            </tbody>
+          </table>
+          <div className="ib gr" style={{marginTop:16,fontSize:12}}>
+            <div style={{fontWeight:700,marginBottom:4}}>Schedule Conditions</div>
+            • Subject to suitable weather conditions<br/>
+            • Dependent on timely provision of required documentation<br/>
+            • Dependent on access availability<br/>
+            • Authority approvals may impact start date<br/><br/>
+            <strong>Delays caused by Client-side dependencies</strong> may result in: extension of time, re-mobilisation charges, variation costs.<br/><br/>
+            This schedule supersedes any previously issued indicative program unless otherwise agreed in writing.
+          </div>
+        </Card>,
+
+        // 5: Variations
+        ()=><Card title="Variation & Scope Change Protocol" sn="7">
+          <p className="hint">The following will constitute a Variation:</p>
+          <CG items={VARIATIONS} selected={f.variations} toggle={tog('variations')}/>
+          <div className="ib gr" style={{marginTop:16,fontSize:12}}>
+            <div style={{fontWeight:700,marginBottom:4}}>All Variations</div>
+            • Will be issued in writing<br/>
+            • Will state cost and time impact<br/>
+            • Must be approved prior to commencement<br/><br/>
+            <strong>No additional works will be undertaken without written approval.</strong>
+          </div>
+        </Card>,
+
+        // 6: Acknowledgement
+        ()=><Card title="Client Acknowledgement" sn="8">
+          <p className="hint">The Client acknowledges that:</p>
+          {ACK_ITEMS.map((a,i)=><div key={i} style={{padding:'10px 0',borderBottom:i<ACK_ITEMS.length-1?'1px solid var(--bd-l)':'none',fontSize:14,color:'var(--tx)'}}>{a}</div>)}
+        </Card>,
+
+        // 7: Authorisation & Export
+        ()=><>
+          <Card title="Authorisation to Proceed" sn="9">
+            <div className="ib gr" style={{marginBottom:18}}>
+              <div style={{fontWeight:700,marginBottom:4}}>I confirm that:</div>
+              <div style={{fontSize:12.5}}>
+                • The scope of works is accurate and agreed<br/>
+                • The AOI boundary is confirmed<br/>
+                • Required documentation has been provided or noted<br/>
+                • The project schedule is accepted<br/>
+                • Kahuto Pacific is authorised to proceed with mobilisation
+              </div>
+            </div>
+            <div style={{display:'flex',gap:20,flexWrap:'wrap'}}>
+              <div className="sig-block">
+                <div className="sig-label">Kahuto Pacific Representative</div>
+                <div className="fr">
+                  <Fd label="Name" value={f.kahutoName} onChange={v=>s('kahutoName',v)} placeholder="Full name" required/>
+                  <Fd label="Position" value={f.kahutoPosition} onChange={v=>s('kahutoPosition',v)} placeholder="e.g. Project Manager"/>
+                  <Fd label="Date" value={f.kahutoDate} onChange={v=>s('kahutoDate',v)} type="date"/>
+                </div>
+              </div>
+              <div className="sig-block">
+                <div className="sig-label">Client</div>
+                <div className="sig-blank">
+                  <div style={{fontSize:28,marginBottom:6}}>✍️</div>
+                  <div style={{fontSize:12}}>Client signature block will be left blank in the PDF for wet signature or digital signing (Adobe Sign / DocuSign).</div>
+                </div>
+              </div>
+            </div>
+          </Card>
+          <Card title="Generate & Download" icon="📄">
+            <div className="ib gr" style={{marginBottom:18}}>
+              <div style={{fontWeight:700,marginBottom:4}}>Two-Stage Signing</div>
+              <div style={{fontSize:12.5}}>
+                <strong>1.</strong> Generate the PDF: Kahuto's details are filled in, client section left blank.<br/>
+                <strong>2.</strong> Email the PDF to the client for digital signing.<br/>
+                <strong>3.</strong> Optionally attach the exported KML alongside the PDF(So that Client can confirm AOI).
+              </div>
+            </div>
+            <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+              <button type="button" className="btn btn-p btn-lg" onClick={handleDownload} style={{flex:1,justifyContent:'center'}}>📄  Generate PDF</button>
+              {f.shapes&&f.shapes.length>0&&<button type="button" className="btn btn-o" onClick={handleExportKML}>📥  Export AOI KML</button>}
+            </div>
+            <div style={{borderTop:'1px solid #eef1ef',marginTop:16,paddingTop:14}}>
+              <button type="button" className="btn btn-gh" onClick={reset}>🔄  Start New Form</button>
+            </div>
+          </Card>
+        </>,
+      ];
+
+      return <div>
+        {toast&&<div className={"toast "+(toast.t==="ok"?"ok":"err")}>{toast.m}</div>}
+
+        <div className="hdr"><div className="hdr-in">
+          <div className="brand">Kahuto Pacific Limited</div>
+          <h1>Project Scope Confirmation, AOI Verification & Mobilisation Authorisation</h1>
+          <div className="hdr-sub">Step {step+1} of {STEPS.length} — {STEPS[step]}</div>
+          <div className="gold-rule"/>
+        </div></div>
+
+        <div className="tabs"><div className="tabs-in">
+          {STEPS.map((l,i)=><button key={l} type="button" className={"tab"+(step===i?" on":"")} onClick={()=>setStep(i)}><span className="n">{i+1}</span>{l}</button>)}
+        </div></div>
+
+        <div className="wrap">{sc[step]()}</div>
+
+        <div className="fnav"><div className="fnav-in">
+          <button type="button" className="btn btn-gh" onClick={()=>setStep(Math.max(0,step-1))} disabled={step===0}>← Back</button>
+          <div style={{display:'flex',alignItems:'center',gap:8}}>
+            <span style={{fontSize:12,color:'#b5bfbc',fontWeight:500}}>{Math.round(progress)}% complete</span>
+            {step<STEPS.length-1&&<button type="button" className="btn btn-p" onClick={()=>setStep(step+1)}>Next →</button>}
+          </div>
+        </div></div>
+      </div>;
+    }
+
+    ReactDOM.render(<App/>,document.getElementById('root'));
+  </script>
+</body>
+</html>
