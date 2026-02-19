@@ -94,6 +94,15 @@
 
     /* Scope item rows */
     .scope-row{display:flex;gap:8px;align-items:start;margin-bottom:8px}
+
+    /* Deliverable row with format */
+    .deliv-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);border:1.5px solid var(--g);background:var(--gxl);margin-bottom:6px;flex-wrap:wrap}
+    .deliv-row .deliv-name{font-size:13px;font-weight:600;color:var(--g);flex:1 1 200px;min-width:180px}
+    .deliv-row .deliv-name::before{content:'✓ ';font-weight:700}
+    .deliv-row select{padding:6px 10px;border:1.5px solid #c8ddd3;border-radius:6px;font-size:12px;background:#fff;color:var(--tx);outline:0;min-width:160px}
+    .deliv-row select:focus{border-color:var(--g);box-shadow:0 0 0 2px rgba(14,74,58,.1)}
+    .deliv-row .deliv-remove{background:none;border:none;color:var(--tx-xs);font-size:14px;padding:2px 6px;border-radius:4px;cursor:pointer}
+    .deliv-row .deliv-remove:hover{color:#c53030;background:rgba(197,48,48,.06)}
     .scope-row .fd{flex:1}
     .scope-del{padding:8px 10px;border-radius:var(--r);background:none;border:1.5px solid var(--bd);color:var(--tx-xs);font-size:14px;margin-top:22px;transition:.15s}
     .scope-del:hover{border-color:#c53030;color:#c53030;background:rgba(197,48,48,.04)}
@@ -147,7 +156,27 @@
 
     const SURVEY_TYPES=["Topographic Survey","Subsurface Utility Detection (GPR / EMI)","Terrestrial Laser Scanning","UAV LiDAR","Photogrammetry","Control Survey","Asset Mapping"];
 
-    const DELIVERABLES=["CAD (DWG)","GIS Package","PDF Plans","Digital Terrain Model (DTM)","Digital Surface Model (DSM)","TIN Model","Classified Point Cloud","Utility Attribute Table","QA/QC Report","Survey Report"];
+    const DELIV_FORMATS={
+      "CAD Drawing":["DWG","DXF"],
+      "GIS Package":["Shapefile (.shp)","GeoPackage (.gpkg)","Geodatabase (.gdb)","MapInfo TAB"],
+      "PDF Plans":["PDF"],
+      "2D Orthomosaic":["GeoTIFF","GeoJPEG","JPEG2000","ECW","KML"],
+      "Digital Terrain Model (DTM)":["GeoTIFF","ASCII Grid (.asc)","LAS","LAZ"],
+      "Digital Surface Model (DSM)":["GeoTIFF","ASCII Grid (.asc)","LAS","LAZ"],
+      "TIN Model":["DWG","LandXML (.xml)"],
+      "Classified Point Cloud":["LAS","LAZ","E57"],
+      "Contours":["DWG","DXF","Shapefile","GeoPackage","KML","PDF"],
+      "Canopy Height Model":["GeoTIFF","ASCII Grid"],
+      "Utility Attribute Table":["CSV","XLSX","Shapefile","GeoPackage"],
+      "QA/QC Report":["PDF"],
+      "Survey Report":["PDF"],
+      "Metadata File":["XML","PDF"],
+      "Aerial Base Map":["GeoTIFF","GeoJPEG","ECW","KML"],
+      "Registered Scan Data":["RCP","LAS","E57"],
+      "Cross Sections":["DWG","DXF","PDF"],
+      "Bathymetry Surface":["GeoTIFF","ASCII Grid","XYZ"],
+    };
+    const DELIVERABLES=Object.keys(DELIV_FORMATS);
 
     const PRE_MOB=["Latest asset plans","Utility authority drawings","As-built drawings","Previous survey data","Control point data","Design drawings","Traffic Management requirements","Access approvals / landowner consent","Site induction documentation","Safety requirements specific to site"];
 
@@ -278,11 +307,11 @@ ${sub('3.2 Field Scope Summary')}
 ${(d.scopeItems||[]).filter(s=>s.trim()).map(s=>'<div style="padding:2px 0;font-size:10.5px;">• '+esc(s)+'</div>').join('')}
 
 ${sub('3.3 Deliverables')}
-<div style="font-size:10.5px;color:#4a5654;margin-bottom:4px;">Kahuto Pacific will provide:</div>
-${chk(d.deliverables)}
-${d.contourInterval?'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>Contours at <b>'+esc(d.contourInterval)+'</b> interval</div>':''}
-${d.deliverableOther?'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>'+esc(d.deliverableOther)+'</div>':''}
-<div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">Any deliverable not listed above is excluded from the agreed scope.</div>
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:4px;">Kahuto Pacific will provide the following in the agreed file formats:</div>
+${(d.deliverables||[]).map(del=>'<div style="padding:3px 0;font-size:10.5px;display:flex;align-items:center;gap:6px;"><span style="color:#0e4a3a;font-weight:700;">☑</span><span>'+del+'</span>'+(d.deliverableFormats&&d.deliverableFormats[del]?'<span style="display:inline-block;padding:2px 8px;border-radius:4px;background:#e8f0ed;color:#0e4a3a;font-size:9px;font-weight:700;border:1px solid #c8ddd3;margin-left:4px;">'+d.deliverableFormats[del]+'</span>':'')+'</div>').join('')}
+${d.contourInterval?'<div style="padding:3px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>Contours at <b>'+esc(d.contourInterval)+'</b> interval</div>':''}
+${d.deliverableOther?'<div style="padding:3px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>'+esc(d.deliverableOther)+'</div>':''}
+<div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">Any deliverable not listed above is excluded from the agreed scope. Requests for alternative file formats will be treated as a Variation.</div>
 
 <!-- 4. AOI Confirmation -->
 ${sec(4,'Area of Interest (AOI) Confirmation')}
@@ -357,7 +386,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
 </div>
 
 <div style="text-align:center;color:#b5bfbc;font-size:8.5px;margin-top:28px;padding-top:10px;border-top:1px solid #dfe4e2;">
-  Kahuto Pacific Limited &middot; Nadi, Fiji &middot; Project Scope Confirmation, AOI Verification &amp; Mobilisation Authorisation &middot; ${today}
+  Kahuto Pacific Limited &middot; Suva, Fiji &middot; Project Scope Confirmation, AOI Verification &amp; Mobilisation Authorisation &middot; ${today}
 </div>
 
 <div class="no-print" style="text-align:center;margin:36px 0;padding:24px;background:#f4f5f4;border-radius:12px;">
@@ -463,7 +492,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
         projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',
         surveyTypes:[],surveyOther:'',
         scopeItems:['','','',''],
-        deliverables:[],contourInterval:'',deliverableOther:'',
+        deliverables:[],deliverableFormats:{},contourInterval:'',deliverableOther:'',
         shapes:[],aoiFileName:'',aoiDateReceived:'',
         preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',
         schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),
@@ -497,7 +526,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
         URL.revokeObjectURL(a.href);show('KML exported','ok');
       };
 
-      const reset=()=>{setF({projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',surveyTypes:[],surveyOther:'',scopeItems:['','','',''],deliverables:[],contourInterval:'',deliverableOther:'',shapes:[],aoiFileName:'',aoiDateReceived:'',preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),variations:[...VARIATIONS],kahutoName:'',kahutoPosition:'',kahutoDate:''});setStep(0);show('Form reset','ok')};
+      const reset=()=>{setF({projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',surveyTypes:[],surveyOther:'',scopeItems:['','','',''],deliverables:[],deliverableFormats:{},contourInterval:'',deliverableOther:'',shapes:[],aoiFileName:'',aoiDateReceived:'',preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),variations:[...VARIATIONS],kahutoName:'',kahutoPosition:'',kahutoDate:''});setStep(0);show('Form reset','ok')};
 
       const progress=((step+1)/STEPS.length)*100;
 
@@ -541,13 +570,43 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
             <button type="button" className="btn btn-gh" style={{fontSize:12,padding:'8px 14px',marginTop:4}} onClick={addScopeItem}>+ Add Scope Item</button>
           </Card>
           <Card title="3.3 — Deliverables" icon="📦">
-            <p className="hint">Kahuto Pacific will provide:</p>
-            <CG items={DELIVERABLES} selected={f.deliverables} toggle={tog('deliverables')}/>
+            <p className="hint">Kahuto Pacific will provide the following. Select each deliverable and confirm the <b>agreed file format</b>.</p>
+            <div className="sl">Select Deliverables</div>
+            <CG items={DELIVERABLES} selected={f.deliverables} toggle={item=>{
+              setF(p=>{
+                const a=p.deliverables||[];
+                const formats={...p.deliverableFormats};
+                if(a.includes(item)){
+                  delete formats[item];
+                  return{...p,deliverables:a.filter(x=>x!==item),deliverableFormats:formats};
+                }else{
+                  formats[item]=DELIV_FORMATS[item][0];
+                  return{...p,deliverables:[...a,item],deliverableFormats:formats};
+                }
+              });
+            }}/>
+
+            {f.deliverables.length>0&&<div style={{marginTop:16}}>
+              <div className="sl">Agreed File Formats</div>
+              <p style={{fontSize:12,color:'var(--tx-xs)',marginBottom:10}}>Confirm the format for each deliverable. Any format change after signing will require a Variation.</p>
+              {f.deliverables.map(d=><div key={d} className="deliv-row">
+                <span className="deliv-name">{d}</span>
+                <select value={f.deliverableFormats[d]||''} onChange={e=>setF(p=>({...p,deliverableFormats:{...p.deliverableFormats,[d]:e.target.value}}))}>
+                  {(DELIV_FORMATS[d]||[]).map(fmt=><option key={fmt} value={fmt}>{fmt}</option>)}
+                </select>
+                <button type="button" className="deliv-remove" onClick={()=>{
+                  setF(p=>{const formats={...p.deliverableFormats};delete formats[d];return{...p,deliverables:p.deliverables.filter(x=>x!==d),deliverableFormats:formats};});
+                }} title="Remove">✕</button>
+              </div>)}
+            </div>}
+
             <div className="fr" style={{marginTop:16}}>
               <Fd label="Contours at ___ interval" value={f.contourInterval} onChange={v=>s('contourInterval',v)} placeholder="e.g. 0.5m" half/>
               <Fd label="Other deliverable" value={f.deliverableOther} onChange={v=>s('deliverableOther',v)} placeholder="Specify..." half/>
             </div>
-            <div style={{marginTop:12,fontSize:12,color:'var(--tx-xs)',fontStyle:'italic'}}>Any deliverable not listed above is excluded from the agreed scope.</div>
+            <div className="ib warn" style={{marginTop:12,fontSize:12}}>
+              <b>Important:</b> Any deliverable not listed above is excluded from the agreed scope. Requests for alternative file formats after signing will be treated as a Variation and may incur reprocessing costs.
+            </div>
           </Card>
         </>,
 
@@ -559,7 +618,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
             <Fd label="Date Received" value={f.aoiDateReceived} onChange={v=>s('aoiDateReceived',v)} type="date" half/>
           </div>
           <div className="sl" style={{marginTop:8}}>Survey Area Definer</div>
-          <p className="hint">Import the agreed KML or draw the survey boundary directly. The area will be exported as a KML file and sent to client (Make sure to export it as a KML file at the end of this form).</p>
+          <p className="hint">Import the agreed KML or draw the survey boundary directly. This area will be embedded in the PDF.</p>
           <SurveyMap shapes={f.shapes} onShapesChange={newShapes=>s('shapes',newShapes)}/>
           <div className="ib warn" style={{marginTop:14}}>
             <div style={{fontWeight:700,marginBottom:4}}>Important</div>
@@ -660,9 +719,9 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
             <div className="ib gr" style={{marginBottom:18}}>
               <div style={{fontWeight:700,marginBottom:4}}>Two-Stage Signing</div>
               <div style={{fontSize:12.5}}>
-                <strong>1.</strong> Generate the PDF: Kahuto's details are filled in, client section left blank.<br/>
-                <strong>2.</strong> Email the PDF to the client for digital signing.<br/>
-                <strong>3.</strong> Optionally attach the exported KML alongside the PDF(So that Client can confirm AOI).
+                <strong>1.</strong> Generate the PDF — Kahuto's details are filled in, client section left blank.<br/>
+                <strong>2.</strong> Email the PDF to the client for wet signature or digital signing via Adobe Sign / DocuSign.<br/>
+                <strong>3.</strong> Optionally attach the exported KML alongside the PDF.
               </div>
             </div>
             <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
