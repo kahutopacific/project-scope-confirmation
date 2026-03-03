@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kahuto Pacific — Project Scope Confirmation, AOI Verification & Mobilisation Authorisation</title>
+  <title>Kahuto Pacific — Project Agreement, AOI Verification & Mobilisation Authorisation</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230e4a3a'/><text x='50%25' y='55%25' font-size='18' text-anchor='middle' dominant-baseline='middle' fill='%23d4a853' font-weight='bold'>K</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -92,10 +92,8 @@
     .toast.ok{background:var(--g);color:#fff}.toast.err{background:#c53030;color:#fff}
     @keyframes fu{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 
-    /* Scope item rows */
     .scope-row{display:flex;gap:8px;align-items:start;margin-bottom:8px}
 
-    /* Deliverable row with format */
     .deliv-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r);border:1.5px solid var(--g);background:var(--gxl);margin-bottom:6px;flex-wrap:wrap}
     .deliv-row .deliv-name{font-size:13px;font-weight:600;color:var(--g);flex:1 1 200px;min-width:180px}
     .deliv-row .deliv-name::before{content:'✓ ';font-weight:700}
@@ -107,14 +105,12 @@
     .scope-del{padding:8px 10px;border-radius:var(--r);background:none;border:1.5px solid var(--bd);color:var(--tx-xs);font-size:14px;margin-top:22px;transition:.15s}
     .scope-del:hover{border-color:#c53030;color:#c53030;background:rgba(197,48,48,.04)}
 
-    /* Schedule table */
     .sched-table{width:100%;border-collapse:collapse;font-size:13px}
     .sched-table th{text-align:left;padding:8px 10px;background:var(--gxl);color:var(--g);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--g)}
     .sched-table td{padding:4px 4px;border-bottom:1px solid var(--bd-l)}
     .sched-table td input{padding:7px 10px;font-size:12px}
     .sched-table .item-no{font-family:monospace;font-weight:700;color:var(--g);font-size:13px;width:36px;text-align:center}
 
-    /* Map */
     .map-wrap{position:relative;height:420px;border-radius:var(--r);overflow:hidden;border:1.5px solid var(--bd);margin:12px 0}
     .map-wrap .leaflet-container{height:100%;width:100%;z-index:1}
     .map-stats{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
@@ -123,10 +119,32 @@
     .leaflet-draw-toolbar a,.leaflet-bar a{background-color:#fff !important;border-color:var(--bd) !important;color:var(--g) !important}
     .leaflet-draw-toolbar a:hover,.leaflet-bar a:hover{background-color:var(--gxl) !important}
 
-    /* Sig block */
     .sig-block{flex:1;min-width:280px;padding:20px;background:#fafbfb;border:1.5px solid var(--bd);border-radius:var(--rl)}
     .sig-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--tx-xs);margin-bottom:14px}
     .sig-blank{text-align:center;padding:30px 16px;color:var(--tx-xs);border:2px dashed var(--bd);border-radius:var(--r)}
+
+    /* ── Costing ── */
+    .cost-svc{padding:16px 18px;border:1.5px solid var(--bd);border-radius:var(--rl);margin-bottom:10px;background:#fafbfb;transition:.2s}
+    .cost-svc.active{border-color:var(--g);background:var(--gxl)}
+    .cost-svc-hdr{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+    .cost-svc-hdr .cost-check{width:22px;height:22px;border-radius:6px;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:transparent;transition:.15s;flex-shrink:0;background:var(--white)}
+    .cost-svc.active .cost-check{border-color:var(--g);background:var(--g);color:#fff}
+    .cost-svc-hdr .cost-name{font-size:14px;font-weight:600;color:var(--tx)}
+    .cost-svc.active .cost-name{color:var(--g)}
+    .cost-svc-hdr .cost-desc{font-size:11px;color:var(--tx-xs);margin-left:auto}
+    .cost-body{margin-top:14px;padding-top:14px;border-top:1px solid var(--bd-l)}
+    .cost-line{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:8px}
+    .cost-line .fd{min-width:0}
+    .cost-line .fd.desc{flex:2 1 200px}.cost-line .fd.qty{flex:0 0 80px;min-width:70px}.cost-line .fd.rate{flex:0 0 120px;min-width:100px}.cost-line .fd.amt{flex:0 0 130px;min-width:110px}
+    .cost-line .fd input[readonly]{background:#e8f0ed;font-weight:700;color:var(--g)}
+    .cost-total-bar{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:linear-gradient(135deg,#082e24,var(--g));border-radius:var(--rl);color:#fff;margin-top:16px}
+    .cost-total-bar .cost-total-label{font-size:13px;font-weight:600;opacity:.8}
+    .cost-total-bar .cost-total-val{font-family:'Fraunces',serif;font-size:26px;font-weight:800;letter-spacing:-.5px}
+    .cost-total-bar .cost-total-cur{font-size:13px;font-weight:600;opacity:.6;margin-left:6px}
+
+    .mode-toggle{display:flex;gap:0;border:1.5px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:4px}
+    .mode-toggle button{padding:6px 14px;font-size:11px;font-weight:600;background:var(--white);color:var(--tx-xs);border:none;transition:.15s}
+    .mode-toggle button.on{background:var(--g);color:#fff}
 
     @media(max-width:640px){
       .hdr-in{padding:22px 18px 16px}.hdr h1{font-size:18px}
@@ -135,6 +153,7 @@
       .tab .n{width:17px;height:17px;font-size:9px;margin-right:3px}
       .map-wrap{height:300px}
       .sig-block{min-width:100%}
+      .cost-line .fd.desc,.cost-line .fd.qty,.cost-line .fd.rate,.cost-line .fd.amt{flex:1 1 100%}
     }
   </style>
 </head>
@@ -147,12 +166,27 @@
   <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 
   <script type="text/babel">
-    const{useState,useEffect,useRef,useCallback}=React;
+    const{useState,useEffect,useRef,useCallback,useMemo}=React;
 
     // ═══════════════════════════════════════
-    //  FORM OPTIONS — matching document exactly
+    //  FORM OPTIONS
     // ═══════════════════════════════════════
-    const STEPS=["Project Info","Scope of Services","AOI Verification","Pre-Mobilisation","Schedule","Variations","Acknowledgement","Authorisation & Export"];
+    const STEPS=["Project Info","Project Costing","Scope of Services","AOI Verification","Pre-Mobilisation","Schedule","Variations","Acknowledgement","Authorisation & Export"];
+
+    const SERVICE_LINES=[
+      {id:'utility',name:'Utility Mapping (GPR / EMI)',desc:'Subsurface utility detection & mapping'},
+      {id:'lidar',name:'Aerial LiDAR Survey',desc:'Airborne laser scanning'},
+      {id:'hydro',name:'Hydrographic Survey',desc:'Bathymetry & water body mapping'},
+      {id:'photo',name:'Photogrammetry',desc:'Aerial imagery & orthomosaic'},
+      {id:'moana',name:'Moana Data Service',desc:'Geospatial data platform access'},
+      {id:'custom',name:'Custom Service',desc:'Specify below'},
+    ];
+
+    const CURRENCIES=[
+      {code:'FJD',symbol:'$',name:'Fijian Dollar'},
+      {code:'USD',symbol:'US$',name:'US Dollar'},
+      {code:'AUD',symbol:'A$',name:'Australian Dollar'},
+    ];
 
     const SURVEY_TYPES=["Topographic Survey","Subsurface Utility Detection (GPR / EMI)","Terrestrial Laser Scanning","UAV LiDAR","Photogrammetry","Control Survey","Asset Mapping"];
 
@@ -241,7 +275,16 @@
     }
 
     // ═══════════════════════════════════════
-    //  PDF GENERATION — Two-stage: Kahuto signed, Client blank
+    //  FORMAT CURRENCY
+    // ═══════════════════════════════════════
+    function fmtCur(val,cur){
+      const c=CURRENCIES.find(x=>x.code===cur)||CURRENCIES[0];
+      const n=parseFloat(val)||0;
+      return c.symbol+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    }
+
+    // ═══════════════════════════════════════
+    //  PDF GENERATION
     // ═══════════════════════════════════════
     function generatePDF(d){
       const today=new Date().toLocaleDateString('en-FJ',{year:'numeric',month:'long',day:'numeric'});
@@ -259,16 +302,31 @@
       let totalArea=0,totalLen=0;
       (d.shapes||[]).forEach(s=>{if(s.type==='polygon')totalArea+=calcPolyArea(s.coords);if(s.type==='polyline')totalLen+=calcLen(s.coords);});
 
-      // Pre-mob status
+      // Pre-mob
       const preMobChecked=(d.preMobStatuses||{});
       const preMobProvided=PRE_MOB.filter(p=>preMobChecked[p]==='Provided');
       const preMobNA=PRE_MOB.filter(p=>preMobChecked[p]==='N/A');
       const preMobOutstanding=PRE_MOB.filter(p=>preMobChecked[p]==='Outstanding');
 
-      // Schedule rows
+      // Schedule
       const schedHtml=(d.schedule||SCHED_ROWS).map(r=>'<tr><td style="padding:5px 10px;font-family:monospace;font-weight:700;color:#0e4a3a;text-align:center;border-bottom:1px solid #eef1ef;width:40px;">'+esc(r.item)+'</td><td style="padding:5px 10px;font-weight:600;border-bottom:1px solid #eef1ef;">'+esc(r.task)+'</td><td style="padding:5px 10px;font-size:10px;color:#4a5654;border-bottom:1px solid #eef1ef;">'+esc(r.desc)+'</td><td style="padding:5px 10px;font-size:10px;text-align:center;border-bottom:1px solid #eef1ef;">'+esc(r.dur)+'</td><td style="padding:5px 10px;font-size:10px;text-align:center;border-bottom:1px solid #eef1ef;">'+esc(r.start||'')+'</td><td style="padding:5px 10px;font-size:10px;text-align:center;border-bottom:1px solid #eef1ef;">'+esc(r.end||'')+'</td></tr>').join('');
 
-      const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>PSC - ${esc(d.projectName||'Form')}</title>
+      // Costing
+      const cur=d.currency||'FJD';
+      const curSym=(CURRENCIES.find(c=>c.code===cur)||CURRENCIES[0]).symbol;
+      const activeServices=(d.costingServices||[]).filter(cs=>cs.active);
+      let grandTotal=0;
+      const costingRowsHtml=activeServices.map(cs=>{
+        const svc=SERVICE_LINES.find(s=>s.id===cs.id);
+        const svcName=cs.id==='custom'?(cs.customName||'Custom Service'):(svc?svc.name:cs.id);
+        return cs.lines.map((line,li)=>{
+          const amt=line.mode==='lumpsum'?(parseFloat(line.amount)||0):((parseFloat(line.qty)||0)*(parseFloat(line.rate)||0));
+          grandTotal+=amt;
+          return '<tr><td style="padding:6px 10px;font-weight:600;border-bottom:1px solid #eef1ef;font-size:10.5px;">'+(li===0?esc(svcName):'')+'</td><td style="padding:6px 10px;font-size:10.5px;border-bottom:1px solid #eef1ef;">'+esc(line.description||'')+'</td><td style="padding:6px 10px;font-size:10.5px;text-align:center;border-bottom:1px solid #eef1ef;">'+(line.mode==='detailed'?(line.qty||''):'—')+'</td><td style="padding:6px 10px;font-size:10.5px;text-align:right;border-bottom:1px solid #eef1ef;">'+(line.mode==='detailed'?curSym+(parseFloat(line.rate)||0).toLocaleString('en-US',{minimumFractionDigits:2}):'—')+'</td><td style="padding:6px 10px;font-size:10.5px;text-align:right;border-bottom:1px solid #eef1ef;font-weight:600;">'+curSym+amt.toLocaleString('en-US',{minimumFractionDigits:2})+'</td></tr>';
+        }).join('');
+      }).join('');
+
+      const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>PA - ${esc(d.projectName||'Form')}</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Fraunces:wght@700;800&display=swap" rel="stylesheet">
 <style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'DM Sans',sans-serif;color:#1a1f1e;font-size:10.5px;line-height:1.55;background:#fff;}@page{size:A4;margin:14mm 18mm 16mm 18mm;}@media print{.no-print{display:none!important;}body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}table{width:100%;border-collapse:collapse;}</style></head><body style="padding:14mm 18mm;">
 
@@ -276,7 +334,7 @@
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
 <div>
   <div style="font-size:9px;letter-spacing:4px;color:#d4a853;font-weight:700;text-transform:uppercase;">Kahuto Pacific Limited</div>
-  <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:800;color:#0e4a3a;line-height:1.25;margin-top:4px;">Project Scope Confirmation,<br/>AOI Verification &amp; Mobilisation Authorisation</div>
+  <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:800;color:#0e4a3a;line-height:1.25;margin-top:4px;">Project Agreement, AOI Verification<br/>&amp; Mobilisation Authorisation</div>
 </div>
 <div style="text-align:right;font-size:10px;color:#8a9593;line-height:1.7;">
   ${d.projectCode?'<div style="font-size:14px;font-weight:700;color:#0e4a3a;font-family:monospace;">'+esc(d.projectCode)+'</div>':''}
@@ -292,29 +350,40 @@ ${sec(1,'Project Information')}
 <!-- 2. Purpose -->
 ${sec(2,'Purpose of This Document')}
 <div style="font-size:10.5px;color:#4a5654;line-height:1.7;">
-<p>This document confirms the agreed Scope of Works, Area of Interest (AOI), Project Schedule, and Pre-Mobilisation Requirements.</p>
-<p style="margin-top:4px;">Upon signature, this document forms the operational agreement governing field mobilisation and delivery of services.</p>
-<p style="margin-top:4px;">Where a formal contract or signed proposal is not in place, this document shall serve as the confirmation of agreed scope.</p>
+<p>This document constitutes the <b>Project Agreement</b> between Kahuto Pacific Limited and the Client for the services described herein.</p>
+<p style="margin-top:4px;">It confirms the agreed <b>Scope of Works</b>, <b>Project Costing</b>, <b>Area of Interest (AOI)</b>, <b>Project Schedule</b>, and <b>Pre-Mobilisation Requirements</b>.</p>
+<p style="margin-top:4px;">Upon signature by both parties, this document authorises Kahuto Pacific to proceed with mobilisation and delivery of services at the agreed cost.</p>
 </div>
 
-<!-- 3. Confirmed Scope of Services -->
-${sec(3,'Confirmed Scope of Services')}
-${sub('3.1 Survey Type')}
+<!-- 3. Project Costing -->
+${sec(3,'Project Costing')}
+<div style="font-size:10.5px;color:#4a5654;margin-bottom:8px;">The following services and associated costs form the agreed project price:</div>
+<table style="border:1px solid #dfe4e2;border-radius:6px;overflow:hidden;">
+<tr style="background:#e8f0ed;"><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:left;border-bottom:1.5px solid #0e4a3a;width:160px;">Service</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:left;border-bottom:1.5px solid #0e4a3a;">Description</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;width:50px;">Qty</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:right;border-bottom:1.5px solid #0e4a3a;width:90px;">Rate (${cur})</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:right;border-bottom:1.5px solid #0e4a3a;width:100px;">Amount (${cur})</th></tr>
+${costingRowsHtml}
+<tr style="background:#082e24;"><td colspan="4" style="padding:8px 10px;font-weight:700;color:#d4a853;font-size:11px;text-align:right;">TOTAL (${cur})</td><td style="padding:8px 10px;font-weight:800;color:#fff;font-size:13px;text-align:right;font-family:monospace;">${curSym}${grandTotal.toLocaleString('en-US',{minimumFractionDigits:2})}</td></tr>
+</table>
+${d.costingNotes?note('Notes: '+d.costingNotes):''}
+<div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">All amounts are exclusive of applicable taxes unless otherwise stated. Payment terms as per Kahuto Pacific's standard terms or as separately agreed.</div>
+
+<!-- 4. Confirmed Scope of Services -->
+${sec(4,'Confirmed Scope of Services')}
+${sub('4.1 Survey Type')}
 <div style="margin:4px 0 10px;">${chip(d.surveyTypes)}${d.surveyOther?chip([d.surveyOther]):''}</div>
 
-${sub('3.2 Field Scope Summary')}
+${sub('4.2 Field Scope Summary')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:4px;">The Client authorises Kahuto Pacific to undertake the following works:</div>
 ${(d.scopeItems||[]).filter(s=>s.trim()).map(s=>'<div style="padding:2px 0;font-size:10.5px;">• '+esc(s)+'</div>').join('')}
 
-${sub('3.3 Deliverables')}
+${sub('4.3 Deliverables')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:4px;">Kahuto Pacific will provide the following in the agreed file formats:</div>
 ${(d.deliverables||[]).map(del=>'<div style="padding:3px 0;font-size:10.5px;display:flex;align-items:center;gap:6px;"><span style="color:#0e4a3a;font-weight:700;">☑</span><span>'+del+'</span>'+(d.deliverableFormats&&d.deliverableFormats[del]?'<span style="display:inline-block;padding:2px 8px;border-radius:4px;background:#e8f0ed;color:#0e4a3a;font-size:9px;font-weight:700;border:1px solid #c8ddd3;margin-left:4px;">'+d.deliverableFormats[del]+'</span>':'')+'</div>').join('')}
 ${d.contourInterval?'<div style="padding:3px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>Contours at <b>'+esc(d.contourInterval)+'</b> interval</div>':''}
 ${d.deliverableOther?'<div style="padding:3px 0;font-size:10.5px;"><span style="color:#0e4a3a;font-weight:700;margin-right:6px;">☑</span>'+esc(d.deliverableOther)+'</div>':''}
 <div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">Any deliverable not listed above is excluded from the agreed scope. Requests for alternative file formats will be treated as a Variation.</div>
 
-<!-- 4. AOI Confirmation -->
-${sec(4,'Area of Interest (AOI) Confirmation')}
+<!-- 5. AOI Confirmation -->
+${sec(5,'Area of Interest (AOI) Confirmation')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">The Client confirms that:</div>
 ${chk(['A KML / SHP defining the Area of Interest (AOI) has been provided.','The AOI boundary is final and accurate.','No works are required outside the confirmed boundary.'])}
 <table style="margin-top:8px;">${row('AOI File Name',d.aoiFileName||'')}${row('Date Received',d.aoiDateReceived||'')}</table>
@@ -323,8 +392,8 @@ ${(d.shapes||[]).length?'<div style="margin-top:8px;padding:8px 12px;background:
 <b>Important:</b><br/>• Any extension beyond the confirmed AOI will constitute a Variation.<br/>• Additional mobilisation or processing resulting from boundary change will be costed separately.
 </div>
 
-<!-- 5. Pre-Mobilisation Requirements -->
-${sec(5,'Client Pre-Mobilisation Requirements')}
+<!-- 6. Pre-Mobilisation Requirements -->
+${sec(6,'Client Pre-Mobilisation Requirements')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">Field works will not commence until the following are provided (where applicable):</div>
 ${preMobProvided.length?'<div style="margin-bottom:6px;">'+chk(preMobProvided.map(p=>p+' — <span style="color:#0e4a3a;font-weight:600;">Provided</span>'))+'</div>':''}
 ${preMobOutstanding.length?'<div style="margin-bottom:6px;">'+preMobOutstanding.map(p=>'<div style="padding:2px 0;font-size:10.5px;"><span style="color:#b7791f;font-weight:700;margin-right:6px;">⚠</span>'+p+' — <span style="color:#b7791f;font-weight:600;">Outstanding</span></div>').join('')+'</div>':''}
@@ -332,8 +401,8 @@ ${preMobNA.length?'<div style="color:#8a9593;">'+unchk(preMobNA.map(p=>p+' — N
 ${d.outstandingNotes?note('Outstanding Items: '+d.outstandingNotes):''}
 <div style="font-size:9.5px;color:#8a9593;margin-top:6px;font-style:italic;">The Client acknowledges that missing documentation may: affect schedule, reduce utility detection confidence levels, result in additional variation costs.</div>
 
-<!-- 6. Project Schedule -->
-${sec(6,'Project Schedule (Agreed Program)')}
+<!-- 7. Project Schedule -->
+${sec(7,'Project Schedule (Agreed Program)')}
 <table style="border:1px solid #dfe4e2;border-radius:6px;overflow:hidden;">
 <tr style="background:#e8f0ed;"><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;width:40px;">Item</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:left;border-bottom:1.5px solid #0e4a3a;">Task</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:left;border-bottom:1.5px solid #0e4a3a;">Description</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;">Duration</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;">Start</th><th style="padding:6px 10px;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#0e4a3a;text-align:center;border-bottom:1.5px solid #0e4a3a;">End</th></tr>
 ${schedHtml}
@@ -344,8 +413,8 @@ ${schedHtml}
 This schedule supersedes any previously issued indicative program unless otherwise agreed in writing.
 </div>
 
-<!-- 7. Variation & Scope Change Protocol -->
-${sec(7,'Variation & Scope Change Protocol')}
+<!-- 8. Variation & Scope Change Protocol -->
+${sec(8,'Variation & Scope Change Protocol')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">The following will constitute a Variation:</div>
 ${chk(d.variations||[])}
 <div style="font-size:9.5px;color:#4a5654;margin-top:8px;line-height:1.7;">
@@ -353,15 +422,15 @@ ${chk(d.variations||[])}
 No additional works will be undertaken without written approval.
 </div>
 
-<!-- 8. Client Acknowledgement -->
-${sec(8,'Client Acknowledgement')}
+<!-- 9. Client Acknowledgement -->
+${sec(9,'Client Acknowledgement')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:6px;">The Client acknowledges that:</div>
 ${ACK_ITEMS.map(a=>'<div style="padding:3px 0;font-size:10.5px;color:#1a1f1e;border-bottom:1px solid #eef1ef;padding-left:4px;">'+a+'</div>').join('')}
 
-<!-- 9. Authorisation to Proceed -->
-${sec(9,'Authorisation to Proceed')}
+<!-- 10. Authorisation to Proceed -->
+${sec(10,'Authorisation to Proceed')}
 <div style="font-size:10.5px;color:#4a5654;margin-bottom:12px;">I confirm that:</div>
-${bullet(['The scope of works is accurate and agreed','The AOI boundary is confirmed','Required documentation has been provided or noted','The project schedule is accepted','Kahuto Pacific is authorised to proceed with mobilisation'])}
+${bullet(['The scope of works and project costing are accurate and agreed','The AOI boundary is confirmed','Required documentation has been provided or noted','The project schedule is accepted','Kahuto Pacific is authorised to proceed with mobilisation'])}
 
 <div style="display:flex;gap:40px;margin-top:20px;">
   <div style="flex:1;">
@@ -386,7 +455,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
 </div>
 
 <div style="text-align:center;color:#b5bfbc;font-size:8.5px;margin-top:28px;padding-top:10px;border-top:1px solid #dfe4e2;">
-  Kahuto Pacific Limited &middot; Suva, Fiji &middot; Project Scope Confirmation, AOI Verification &amp; Mobilisation Authorisation &middot; ${today}
+  Kahuto Pacific Limited &middot; Nadi, Fiji &middot; Project Agreement, AOI Verification &amp; Mobilisation Authorisation &middot; ${today}
 </div>
 
 <div class="no-print" style="text-align:center;margin:36px 0;padding:24px;background:#f4f5f4;border-radius:12px;">
@@ -403,13 +472,88 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
     //  UI COMPONENTS
     // ═══════════════════════════════════════
     function Card({title,icon,sn,children}){return <div className="card">{title&&<div className="ct">{sn?<div className="sn">{sn}</div>:<div className="ic">{icon}</div>}{title}</div>}{children}</div>}
-    function Fd({label,value,onChange,placeholder,type,half,third,required}){return <div className={"fd"+(half?" h":"")+(third?" t":"")}>
-      <label className="fl">{label}{required&&<span className="rq"> *</span>}</label>
-      <input type={type||"text"} value={value||""} placeholder={placeholder||""} onChange={e=>onChange(e.target.value)}/>
+    function Fd({label,value,onChange,placeholder,type,half,third,required,readOnly}){return <div className={"fd"+(half?" h":"")+(third?" t":"")}>
+      {label&&<label className="fl">{label}{required&&<span className="rq"> *</span>}</label>}
+      <input type={type||"text"} value={value||""} placeholder={placeholder||""} onChange={e=>onChange&&onChange(e.target.value)} readOnly={readOnly}/>
     </div>}
     function Ta({label,value,onChange,placeholder,rows}){return <div className="fd"><label className="fl">{label}</label><textarea value={value||""} placeholder={placeholder} rows={rows||3} onChange={e=>onChange(e.target.value)}/></div>}
     function CG({items,selected,toggle}){return <div className="cg">{items.map(i=><button key={i} type="button" className={"ch"+(selected.includes(i)?" on":"")} onClick={()=>toggle(i)}>{i}</button>)}</div>}
     function PMRow({label,status,onChange}){return <div className="pr"><span className="pr-l">{label}</span><div className="pr-bs">{["Provided","Outstanding","N/A"].map(s=><button key={s} type="button" className={"pb"+(status===s?(s==="Provided"?" yes":s==="Outstanding"?" out":" na"):"")} onClick={()=>onChange(s)}>{s}</button>)}</div></div>}
+
+    // ═══════════════════════════════════════
+    //  COSTING LINE COMPONENT
+    // ═══════════════════════════════════════
+    function CostingLine({line,currency,onChange,onRemove,canRemove}){
+      const curSym=(CURRENCIES.find(c=>c.code===currency)||CURRENCIES[0]).symbol;
+      const computedAmt=line.mode==='lumpsum'?(parseFloat(line.amount)||0):((parseFloat(line.qty)||0)*(parseFloat(line.rate)||0));
+      return <div className="cost-line">
+        <div className="fd desc">
+          {line._first&&<label className="fl">Description</label>}
+          <input value={line.description||''} placeholder="Line item description..." onChange={e=>onChange({...line,description:e.target.value})}/>
+        </div>
+        <div style={{display:'flex',alignItems:'end',gap:6}}>
+          {line._first&&<div style={{marginBottom:40}}><div className="mode-toggle">
+            <button type="button" className={line.mode==='lumpsum'?'on':''} onClick={()=>onChange({...line,mode:'lumpsum'})}>Lump Sum</button>
+            <button type="button" className={line.mode==='detailed'?'on':''} onClick={()=>onChange({...line,mode:'detailed'})}>Qty × Rate</button>
+          </div></div>}
+          {!line._first&&<div style={{width:line.mode==='lumpsum'?0:0}}/>}
+        </div>
+        {line.mode==='detailed'&&<>
+          <div className="fd qty">
+            {line._first&&<label className="fl">Qty</label>}
+            <input type="number" value={line.qty||''} placeholder="0" min="0" onChange={e=>onChange({...line,qty:e.target.value})}/>
+          </div>
+          <div className="fd rate">
+            {line._first&&<label className="fl">Rate ({currency})</label>}
+            <input type="number" value={line.rate||''} placeholder="0.00" min="0" step="0.01" onChange={e=>onChange({...line,rate:e.target.value})}/>
+          </div>
+        </>}
+        {line.mode==='lumpsum'&&<div className="fd amt">
+          {line._first&&<label className="fl">Amount ({currency})</label>}
+          <input type="number" value={line.amount||''} placeholder="0.00" min="0" step="0.01" onChange={e=>onChange({...line,amount:e.target.value})}/>
+        </div>}
+        {line.mode==='detailed'&&<div className="fd" style={{flex:'0 0 130px',minWidth:110}}>
+          {line._first&&<label className="fl">Amount ({currency})</label>}
+          <input readOnly value={computedAmt?curSym+computedAmt.toLocaleString('en-US',{minimumFractionDigits:2}):''} placeholder="—" style={{background:'#e8f0ed',fontWeight:700,color:'#0e4a3a'}}/>
+        </div>}
+        {canRemove&&<button type="button" className="scope-del" style={{marginTop:line._first?22:0,padding:'6px 10px'}} onClick={onRemove} title="Remove line">✕</button>}
+      </div>;
+    }
+
+    // ═══════════════════════════════════════
+    //  SERVICE COSTING BLOCK
+    // ═══════════════════════════════════════
+    function ServiceCostBlock({svc,data,currency,onToggle,onUpdate}){
+      const isActive=data.active;
+      const lines=data.lines||[];
+
+      const updateLine=(idx,newLine)=>{
+        const nl=[...lines];nl[idx]=newLine;onUpdate({...data,lines:nl});
+      };
+      const addLine=()=>onUpdate({...data,lines:[...lines,{description:'',mode:lines[0]?.mode||'lumpsum',qty:'',rate:'',amount:''}]});
+      const removeLine=idx=>onUpdate({...data,lines:lines.filter((_,i)=>i!==idx)});
+
+      return <div className={"cost-svc"+(isActive?' active':'')}>
+        <div className="cost-svc-hdr" onClick={onToggle}>
+          <div className="cost-check">{isActive?'✓':''}</div>
+          <div>
+            <div className="cost-name">{svc.name}</div>
+            <div style={{fontSize:11,color:isActive?'#1a6b54':'#8a9593',marginTop:1}}>{svc.desc}</div>
+          </div>
+        </div>
+        {isActive&&<div className="cost-body">
+          {svc.id==='custom'&&<div style={{marginBottom:12}}>
+            <Fd label="Custom Service Name" value={data.customName||''} onChange={v=>onUpdate({...data,customName:v})} placeholder="Enter service name..."/>
+          </div>}
+          {lines.map((line,i)=><CostingLine key={i} line={{...line,_first:i===0}} currency={currency}
+            onChange={nl=>updateLine(i,nl)}
+            onRemove={()=>removeLine(i)}
+            canRemove={lines.length>1}
+          />)}
+          <button type="button" className="btn btn-gh" style={{fontSize:11,padding:'6px 12px',marginTop:4}} onClick={addLine}>+ Add Line Item</button>
+        </div>}
+      </div>;
+    }
 
     // ═══════════════════════════════════════
     //  MAP COMPONENT
@@ -488,8 +632,16 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
       const[toast,setToast]=useState(null);
       const show=(m,t)=>{setToast({m,t});setTimeout(()=>setToast(null),3000)};
 
+      const defaultCostingServices=SERVICE_LINES.map(svc=>({
+        id:svc.id,active:false,customName:'',
+        lines:[{description:'',mode:'lumpsum',qty:'',rate:'',amount:''}]
+      }));
+
       const[f,setF]=useState({
         projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',
+        currency:'FJD',
+        costingServices:defaultCostingServices,
+        costingNotes:'',
         surveyTypes:[],surveyOther:'',
         scopeItems:['','','',''],
         deliverables:[],deliverableFormats:{},contourInterval:'',deliverableOther:'',
@@ -509,6 +661,26 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
 
       const updateSched=(idx,field,val)=>setF(p=>{const sched=[...p.schedule];sched[idx]={...sched[idx],[field]:val};return{...p,schedule:sched};});
 
+      const toggleCostingSvc=id=>setF(p=>{
+        const svcs=p.costingServices.map(cs=>cs.id===id?{...cs,active:!cs.active}:cs);
+        return{...p,costingServices:svcs};
+      });
+      const updateCostingSvc=(id,data)=>setF(p=>{
+        const svcs=p.costingServices.map(cs=>cs.id===id?data:cs);
+        return{...p,costingServices:svcs};
+      });
+
+      const grandTotal=useMemo(()=>{
+        let t=0;
+        (f.costingServices||[]).filter(cs=>cs.active).forEach(cs=>{
+          (cs.lines||[]).forEach(line=>{
+            if(line.mode==='lumpsum')t+=parseFloat(line.amount)||0;
+            else t+=(parseFloat(line.qty)||0)*(parseFloat(line.rate)||0);
+          });
+        });
+        return t;
+      },[f.costingServices]);
+
       const handleDownload=()=>{
         if(!f.projectName){show('Please enter a Project Name in Step 1','err');return;}
         if(!f.kahutoName){show('Please fill in Kahuto representative details in the Authorisation step','err');return;}
@@ -526,9 +698,10 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
         URL.revokeObjectURL(a.href);show('KML exported','ok');
       };
 
-      const reset=()=>{setF({projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',surveyTypes:[],surveyOther:'',scopeItems:['','','',''],deliverables:[],deliverableFormats:{},contourInterval:'',deliverableOther:'',shapes:[],aoiFileName:'',aoiDateReceived:'',preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),variations:[...VARIATIONS],kahutoName:'',kahutoPosition:'',kahutoDate:''});setStep(0);show('Form reset','ok')};
+      const reset=()=>{setF({projectName:'',projectCode:'',clientCompany:'',clientRep:'',clientEmail:'',siteLocation:'',proposalRef:'',dateIssued:'',currency:'FJD',costingServices:SERVICE_LINES.map(svc=>({id:svc.id,active:false,customName:'',lines:[{description:'',mode:'lumpsum',qty:'',rate:'',amount:''}]})),costingNotes:'',surveyTypes:[],surveyOther:'',scopeItems:['','','',''],deliverables:[],deliverableFormats:{},contourInterval:'',deliverableOther:'',shapes:[],aoiFileName:'',aoiDateReceived:'',preMobStatuses:Object.fromEntries(PRE_MOB.map(p=>[p,''])),outstandingNotes:'',schedule:SCHED_ROWS.map(r=>({...r,start:'',end:''})),variations:[...VARIATIONS],kahutoName:'',kahutoPosition:'',kahutoDate:''});setStep(0);show('Form reset','ok')};
 
       const progress=((step+1)/STEPS.length)*100;
+      const curSym=(CURRENCIES.find(c=>c.code===f.currency)||CURRENCIES[0]).symbol;
 
       const sc=[
         // 0: Project Info
@@ -547,21 +720,58 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
           </Card>
           <Card title="Purpose of This Document" sn="2">
             <div className="hint">
-              This document confirms the agreed <b>Scope of Works</b>, <b>Area of Interest (AOI)</b>, <b>Project Schedule</b>, and <b>Pre-Mobilisation Requirements</b>.
+              This document constitutes the <b>Project Agreement</b> between Kahuto Pacific Limited and the Client for the services described herein.
             </div>
-            <div className="hint">Upon signature, this document forms the operational agreement governing field mobilisation and delivery of services.</div>
-            <div className="hint">Where a formal contract or signed proposal is not in place, this document shall serve as the confirmation of agreed scope.</div>
+            <div className="hint">It confirms the agreed <b>Scope of Works</b>, <b>Project Costing</b>, <b>Area of Interest (AOI)</b>, <b>Project Schedule</b>, and <b>Pre-Mobilisation Requirements</b>.</div>
+            <div className="hint">Upon signature by both parties, this document authorises Kahuto Pacific to proceed with mobilisation and delivery of services at the agreed cost.</div>
           </Card>
         </>,
 
-        // 1: Scope of Services
+        // 1: Project Costing
         ()=><>
-          <Card title="3.1 — Survey Type" sn="3">
+          <Card title="Project Costing" sn="3">
+            <p className="hint">Select the services for this project and enter the agreed costs. Each service can have multiple line items.</p>
+            <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:18}}>
+              <label className="fl" style={{margin:0,whiteSpace:'nowrap'}}>Currency</label>
+              <select value={f.currency} onChange={e=>s('currency',e.target.value)} style={{padding:'8px 14px',border:'1.5px solid var(--bd)',borderRadius:'var(--r)',fontSize:14,background:'#fafbfb',color:'var(--tx)',outline:0,minWidth:180}}>
+                {CURRENCIES.map(c=><option key={c.code} value={c.code}>{c.code} — {c.name}</option>)}
+              </select>
+            </div>
+
+            {SERVICE_LINES.map(svc=>{
+              const data=f.costingServices.find(cs=>cs.id===svc.id)||{active:false,lines:[{description:'',mode:'lumpsum',qty:'',rate:'',amount:''}]};
+              return <ServiceCostBlock key={svc.id} svc={svc} data={data} currency={f.currency}
+                onToggle={()=>toggleCostingSvc(svc.id)}
+                onUpdate={newData=>updateCostingSvc(svc.id,newData)}
+              />;
+            })}
+
+            <div className="cost-total-bar">
+              <div>
+                <div className="cost-total-label">Project Total</div>
+                <div style={{fontSize:11,opacity:.5,marginTop:2}}>{f.costingServices.filter(cs=>cs.active).length} service{f.costingServices.filter(cs=>cs.active).length!==1?'s':''} selected</div>
+              </div>
+              <div style={{textAlign:'right'}}>
+                <div className="cost-total-val">{curSym}{grandTotal.toLocaleString('en-US',{minimumFractionDigits:2})}<span className="cost-total-cur">{f.currency}</span></div>
+              </div>
+            </div>
+          </Card>
+          <Card title="Costing Notes" icon="📝">
+            <Ta label="Additional Notes (optional)" value={f.costingNotes} onChange={v=>s('costingNotes',v)} placeholder="e.g. Payment terms, exclusions, mobilisation conditions..." rows={3}/>
+            <div style={{marginTop:10,fontSize:12,color:'var(--tx-xs)',fontStyle:'italic'}}>
+              All amounts are exclusive of applicable taxes unless otherwise stated. Payment terms as per Kahuto Pacific's standard terms or as separately agreed.
+            </div>
+          </Card>
+        </>,
+
+        // 2: Scope of Services
+        ()=><>
+          <Card title="4.1 — Survey Type" sn="4">
             <p className="hint">Select all applicable survey types for this engagement.</p>
             <CG items={SURVEY_TYPES} selected={f.surveyTypes} toggle={tog('surveyTypes')}/>
             <div style={{marginTop:16}}><Fd label="Other (specify)" value={f.surveyOther} onChange={v=>s('surveyOther',v)}/></div>
           </Card>
-          <Card title="3.2 — Field Scope Summary" icon="📝">
+          <Card title="4.2 — Field Scope Summary" icon="📝">
             <p className="hint">The Client authorises Kahuto Pacific to undertake the following works:</p>
             {f.scopeItems.map((item,i)=><div key={i} className="scope-row">
               <Fd label={i===0?"Scope Item":"" } value={item} onChange={v=>updateScopeItem(i,v)} placeholder={"Describe scope item "+(i+1)+"..."}/>
@@ -569,7 +779,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
             </div>)}
             <button type="button" className="btn btn-gh" style={{fontSize:12,padding:'8px 14px',marginTop:4}} onClick={addScopeItem}>+ Add Scope Item</button>
           </Card>
-          <Card title="3.3 — Deliverables" icon="📦">
+          <Card title="4.3 — Deliverables" icon="📦">
             <p className="hint">Kahuto Pacific will provide the following. Select each deliverable and confirm the <b>agreed file format</b>.</p>
             <div className="sl">Select Deliverables</div>
             <CG items={DELIVERABLES} selected={f.deliverables} toggle={item=>{
@@ -610,8 +820,8 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
           </Card>
         </>,
 
-        // 2: AOI Verification
-        ()=><Card title="Area of Interest (AOI) Confirmation" sn="4">
+        // 3: AOI Verification
+        ()=><Card title="Area of Interest (AOI) Confirmation" sn="5">
           <p className="hint">The Client confirms that a KML/SHP defining the AOI has been provided, the boundary is final and accurate, and no works are required outside the confirmed boundary.</p>
           <div className="fr" style={{marginBottom:16}}>
             <Fd label="AOI File Name" value={f.aoiFileName} onChange={v=>s('aoiFileName',v)} placeholder="e.g. kings_road_survey_area.kml" half/>
@@ -626,8 +836,8 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
           </div>
         </Card>,
 
-        // 3: Pre-Mobilisation
-        ()=><Card title="Client Pre-Mobilisation Requirements" sn="5">
+        // 4: Pre-Mobilisation
+        ()=><Card title="Client Pre-Mobilisation Requirements" sn="6">
           <p className="hint">Field works will not commence until the following are provided (where applicable). Set the status of each item.</p>
           {PRE_MOB.map(p=><PMRow key={p} label={p} status={f.preMobStatuses[p]} onChange={v=>s('preMobStatuses',{...f.preMobStatuses,[p]:v})}/>)}
           <div style={{marginTop:16}}>
@@ -638,8 +848,8 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
           </div>
         </Card>,
 
-        // 4: Schedule
-        ()=><Card title="Project Schedule (Agreed Program)" sn="6">
+        // 5: Schedule
+        ()=><Card title="Project Schedule (Agreed Program)" sn="7">
           <p className="hint">The following schedule forms part of the confirmed scope.</p>
           <table className="sched-table">
             <thead><tr><th>Item</th><th>Task</th><th>Description</th><th>Duration</th><th>Start Date</th><th>End Date</th></tr></thead>
@@ -665,8 +875,8 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
           </div>
         </Card>,
 
-        // 5: Variations
-        ()=><Card title="Variation & Scope Change Protocol" sn="7">
+        // 6: Variations
+        ()=><Card title="Variation & Scope Change Protocol" sn="8">
           <p className="hint">The following will constitute a Variation:</p>
           <CG items={VARIATIONS} selected={f.variations} toggle={tog('variations')}/>
           <div className="ib gr" style={{marginTop:16,fontSize:12}}>
@@ -678,19 +888,19 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
           </div>
         </Card>,
 
-        // 6: Acknowledgement
-        ()=><Card title="Client Acknowledgement" sn="8">
+        // 7: Acknowledgement
+        ()=><Card title="Client Acknowledgement" sn="9">
           <p className="hint">The Client acknowledges that:</p>
           {ACK_ITEMS.map((a,i)=><div key={i} style={{padding:'10px 0',borderBottom:i<ACK_ITEMS.length-1?'1px solid var(--bd-l)':'none',fontSize:14,color:'var(--tx)'}}>{a}</div>)}
         </Card>,
 
-        // 7: Authorisation & Export
+        // 8: Authorisation & Export
         ()=><>
-          <Card title="Authorisation to Proceed" sn="9">
+          <Card title="Authorisation to Proceed" sn="10">
             <div className="ib gr" style={{marginBottom:18}}>
               <div style={{fontWeight:700,marginBottom:4}}>I confirm that:</div>
               <div style={{fontSize:12.5}}>
-                • The scope of works is accurate and agreed<br/>
+                • The scope of works and project costing are accurate and agreed<br/>
                 • The AOI boundary is confirmed<br/>
                 • Required documentation has been provided or noted<br/>
                 • The project schedule is accepted<br/>
@@ -724,6 +934,10 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
                 <strong>3.</strong> Optionally attach the exported KML alongside the PDF.
               </div>
             </div>
+            {grandTotal>0&&<div style={{padding:'14px 18px',background:'linear-gradient(135deg,#082e24,#0e4a3a)',borderRadius:'var(--rl)',color:'#fff',marginBottom:16,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <span style={{fontSize:13,fontWeight:600,opacity:.8}}>Agreement Total</span>
+              <span style={{fontFamily:'Fraunces, serif',fontSize:22,fontWeight:800}}>{curSym}{grandTotal.toLocaleString('en-US',{minimumFractionDigits:2})} <span style={{fontSize:12,fontWeight:500,opacity:.6}}>{f.currency}</span></span>
+            </div>}
             <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
               <button type="button" className="btn btn-p btn-lg" onClick={handleDownload} style={{flex:1,justifyContent:'center'}}>📄  Generate PDF</button>
               {f.shapes&&f.shapes.length>0&&<button type="button" className="btn btn-o" onClick={handleExportKML}>📥  Export AOI KML</button>}
@@ -740,7 +954,7 @@ ${bullet(['The scope of works is accurate and agreed','The AOI boundary is confi
 
         <div className="hdr"><div className="hdr-in">
           <div className="brand">Kahuto Pacific Limited</div>
-          <h1>Project Scope Confirmation, AOI Verification & Mobilisation Authorisation</h1>
+          <h1>Project Agreement, AOI Verification & Mobilisation Authorisation</h1>
           <div className="hdr-sub">Step {step+1} of {STEPS.length} — {STEPS[step]}</div>
           <div className="gold-rule"/>
         </div></div>
